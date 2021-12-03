@@ -24,6 +24,21 @@ const getItems = {
   }
 }
 
+const postItems = {
+  schema: {
+    body: {
+        type: 'object',
+        required: ['name', 'login', 'password'],
+        properties: {
+        name: {type: 'string'},
+        login: {type: 'string'},
+        password: {type: 'string'},
+      }
+
+    }
+  }
+}
+
 const userRouter = async (fastify) => {
 
   fastify.addContentTypeParser('application/json', async (request, payload, done) => {
@@ -42,27 +57,19 @@ const userRouter = async (fastify) => {
     }
     return res
   })
-  // fastify.route({
-  //   // method: 'POST',
-  //   url: '/users'
-  //   // handler: (req, res) => {
-  //   //   req.body.on('data', d => console.log(11111111111, d)) // log every incoming object
-  //   // }
-  // })
 
-  fastify.get('/users', getItems, async (req, res) => {
+  fastify.get('/', getItems, async (req, res) => {
     try {  
       const users = await usersService.getAll();
         // map user fields to exclude secret fields like "password"
       res.send(users)
-      // responseCodeMesssage(res, HTTP_STATUS_CODES.OK, users.map(User.toResponse))
     } catch (e) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
         HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
   });
 
-  fastify.get('/users/:id', async (req, res) => {
+  fastify.get('/:id', async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {
@@ -83,7 +90,7 @@ const userRouter = async (fastify) => {
   });
 
 
-  fastify.post('/users', async (req, res) => {
+  fastify.post('/', postItems, async (req, res) => {
     try {
       const { name, login, password } = req.body
       const post = await usersService.pushDB(new User({ name, login, password }))
@@ -94,7 +101,7 @@ const userRouter = async (fastify) => {
     }
   });
 
-  fastify.put(`/users/:id`, async (req, res) => {
+  fastify.put(`/:id`, postItems, async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {
@@ -118,7 +125,7 @@ const userRouter = async (fastify) => {
   
   });
 
-  fastify.delete(`/users/:id`, async (req, res) => {
+  fastify.delete(`/:id`, async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {

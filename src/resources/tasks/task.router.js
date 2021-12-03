@@ -4,6 +4,25 @@ const Task = require('./task.model');
 const tasksService = require('./task.service');
 const boardsService = require('../boards/board.service.js')
 
+const postItems = {
+  schema: {
+    body: {
+        type: 'object',
+        required: ['title',
+        'order', 
+        'description' ],
+        properties: {
+        title: {type: 'string'},
+        order: {type: 'number'}, 
+        description: {type: 'string'}, 
+        userId: {type: ['string','null']},
+        boardId: {type: 'string'}, 
+        columnId: {type: ['string','null']} 
+      }
+    }
+  }
+}
+
 const taskRouter = async (fastify)=> {
 
   fastify.addContentTypeParser('application/json', async (request, payload, done) => {
@@ -23,7 +42,7 @@ const taskRouter = async (fastify)=> {
     return res
   })
 
-  fastify.get('/boards/:boardId/tasks', async (req, res) => {
+  fastify.get('/:boardId/tasks', async (req, res) => {
       
     try {  
       const { boardId } = req.params
@@ -45,7 +64,7 @@ const taskRouter = async (fastify)=> {
     }
   });
 
-  fastify.get('/boards/:boardId/tasks/:id', async (req, res) => {
+  fastify.get('/:boardId/tasks/:id', async (req, res) => {
     try {
       const { id, boardId } = req.params
       if (!isUuid(id)) {
@@ -74,7 +93,7 @@ const taskRouter = async (fastify)=> {
   });
 
 
-  fastify.post('/boards/:boardId/tasks', async (req, res) => {
+  fastify.post('/:boardId/tasks', postItems, async (req, res) => {
     try {
       const { boardId } = req.params
       if (!isUuid(boardId)) {
@@ -112,7 +131,7 @@ const taskRouter = async (fastify)=> {
 
   });
 
-  fastify.put(`/boards/:boardId/tasks/:id`, async (req, res) => {
+  fastify.put(`/:boardId/tasks/:id`, postItems, async (req, res) => {
     try {
       const { id, boardId } = req.params
       if (!isUuid(id)) {
@@ -155,7 +174,7 @@ const taskRouter = async (fastify)=> {
   
   });
 
-  fastify.delete(`/boards/:boardId/tasks/:id`, async (req, res) => {
+  fastify.delete(`/:boardId/tasks/:id`, async (req, res) => {
     try {
       const { id, boardId } = req.params
       if (!isUuid(id)) {

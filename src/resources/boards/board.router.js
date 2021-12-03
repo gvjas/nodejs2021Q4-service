@@ -4,6 +4,19 @@ const Board = require('./board.model');
 const boardsService = require('./board.service');
 const tasksService = require('../tasks/task.service');
 
+const postItems = {
+  schema: {
+    body: {
+        type: 'object',
+        required: ['title', 'columns'],
+        properties: {
+        title: {type: 'string'},
+        columns: {type: 'array'}
+      }
+    }
+  }
+}
+
 const boardRouter = async (fastify)=> {
 
   fastify.addContentTypeParser('application/json', async (request, payload, done) => {
@@ -23,7 +36,7 @@ const boardRouter = async (fastify)=> {
     return res
   })
 
-  fastify.get('/boards', async (req, res) => {
+  fastify.get('/', async (req, res) => {
     try {  
       const boards = await boardsService.getAll();
       responseCodeMesssage(res, HTTP_STATUS_CODES.OK, boards.map(Board.toResponse))
@@ -33,7 +46,7 @@ const boardRouter = async (fastify)=> {
     }
   });
 
-  fastify.get('/boards/:id', async (req, res) => {
+  fastify.get('/:id', async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {
@@ -53,7 +66,7 @@ const boardRouter = async (fastify)=> {
     }
   });
 
-  fastify.post('/boards', async (req, res) => {
+  fastify.post('', postItems, async (req, res) => {
     try {
       const { title, columns } = req.body
       const post = await boardsService.pushDB(new Board({title, columns}))
@@ -65,7 +78,7 @@ const boardRouter = async (fastify)=> {
   });
 
 
-  fastify.put(`/boards/:id`, async (req, res) => {
+  fastify.put(`/:id`, postItems, async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {
@@ -89,7 +102,7 @@ const boardRouter = async (fastify)=> {
   });
 
 
-  fastify.delete(`/boards/:id`, async (req, res) => {
+  fastify.delete(`/:id`, async (req, res) => {
     try {
       const { id } = req.params
       if (!isUuid(id)) {
