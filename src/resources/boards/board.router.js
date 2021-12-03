@@ -1,84 +1,117 @@
-// const fastify = require('express').Router();
-
+const { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } = require('../constants');
+const {responseCodeMesssage, isUuid} = require('../utils')
 const Board = require('./board.model');
 const boardsService = require('./board.service');
 const tasksService = require('../tasks/task.service');
 
 const boardRouter = async (fastify)=> {
+
+  fastify.addContentTypeParser('application/json', async (request, payload, done) => {
+ 
+    let res = '';
+    try {
+      const buffers = []; 
+      /* eslint-disable-next-line */   
+      for await (const chunk of payload) {
+        buffers.push(chunk);
+      }
+      res = JSON.parse(Buffer.concat(buffers).toString())
+    } catch (err) {
+      err.statusCode = HTTP_STATUS_CODES.NOT_VALID
+      done(HTTP_RESPOSE_MESSAGES.NOT_JSON, undefined)
+    }
+    return res
+  })
+
   fastify.get('/boards', async (req, res) => {
-    // res.send('Hello world');
     try {  
       const boards = await boardsService.getAll();
-        // map board fields to exclude secret fields like "password"
-      res.send(boards.map(Board.toResponse));
+      responseCodeMesssage(res, HTTP_STATUS_CODES.OK, boards.map(Board.toResponse))
     } catch (e) {
-      res.status(500).send(e)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
   });
 
   fastify.get('/boards/:id', async (req, res) => {
     try {
       const { id } = req.params
+      if (!isUuid(id)) {
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_VALID,
+          HTTP_RESPOSE_MESSAGES.NOT_VALID)
+      }
       const board = await boardsService.getById(id);
       if (!board) {
-        res.status(404).send({'Bad Request': 'Id Not Found'});
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
+          HTTP_RESPOSE_MESSAGES.NOT_FOUND)
       } else {
-        res.send(board);
-      }
-      
+        responseCodeMesssage(res, HTTP_STATUS_CODES.OK, Board.toResponse(board));
+      }      
     } catch (e) {
-      res.status(500).send(e)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
   });
-
 
   fastify.post('/boards', async (req, res) => {
     try {
       const { title, columns } = req.body
       const post = await boardsService.pushDB(new Board({title, columns}))
-      res.status(201).send(post)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.CREATED, Board.toResponse(post));
     } catch (e) {
-      res.status(500).send(e)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
-
   });
+
 
   fastify.put(`/boards/:id`, async (req, res) => {
     try {
       const { id } = req.params
+      if (!isUuid(id)) {
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_VALID,
+          HTTP_RESPOSE_MESSAGES.NOT_VALID)
+      } 
       const boardById = await boardsService.getById(id);
       if (!boardById) {
-        res.status(404).send({'Bad Request': 'Id Not Found'});
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
+          HTTP_RESPOSE_MESSAGES.NOT_FOUND);
       } else {
         const { title, columns } = req.body
-        const board = { id, title, columns }        
+        const board = { id, title, columns }
         const updateBoard = await boardsService.update(board)
-        res.send(updateBoard)
+        responseCodeMesssage(res, HTTP_STATUS_CODES.OK, Board.toResponse(updateBoard));
       }
     } catch (e) {
-      res.status(500).send(e)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
-  
   });
 
+
   fastify.delete(`/boards/:id`, async (req, res) => {
-    try {      
+    try {
       const { id } = req.params
+      if (!isUuid(id)) {
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_VALID,
+          HTTP_RESPOSE_MESSAGES.NOT_VALID)
+      } 
       const board = await boardsService.getById(id);
       if (!board) {
-        res.status(404).send({'Bad Request': 'Id Not Found'});
+        responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
+          HTTP_RESPOSE_MESSAGES.NOT_FOUND);
       } else {
-        await tasksService.delAll(id)
         await boardsService.del(id)
-        res.status(204)
+        await tasksService.delAll(id)
+        res.status(HTTP_STATUS_CODES.DELETED)
         res.send()
       }
     } catch (e) {
-      res.status(500).send(e)
+      responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
   
   });
-
 }
 
 

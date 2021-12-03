@@ -1,5 +1,3 @@
-// const User = require("./user.model");
-
 let db = []
 
 const getAll = async () => 

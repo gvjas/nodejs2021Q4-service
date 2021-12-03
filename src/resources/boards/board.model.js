@@ -1,16 +1,20 @@
 const uuid = require('uuid').v4;
 
+const Column = require('../columns/column.model')
+
 class Board {
   constructor({
     id = uuid(),
     title = 'BOARD',
-    columns = 'board',
-    // password = 'P@55w0rd'
+    columns =  [new Column()]
   } = {}) {
     this.id = id;
     this.title = title;
     this.columns = columns;
-    // this.password = password;
+  }
+
+  setColumn(column) {
+    this.column = column
   }
 
   static toResponse(board) {

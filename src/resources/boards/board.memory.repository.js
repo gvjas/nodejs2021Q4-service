@@ -1,5 +1,3 @@
-// const User = require("./board.model");
-
 let db = []
 
 const getAll = async () => 
@@ -25,6 +23,5 @@ const del = async (id) => {
   db = db.filter((u) => u.id !== id)
   
 }
-
 
 module.exports = { getAll, pushDB, getById, update, del };
