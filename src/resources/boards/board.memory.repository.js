@@ -1,23 +1,23 @@
-// const User = require("./user.model");
+// const User = require("./board.model");
 
 let db = []
 
 const getAll = async () => 
   // TODO: mock implementation. should be replaced during task development
-  db
+   db
 ;
 
-const getById = async (id) => db.find((u) => u.id === id);
+const getById = async (id) => db.find( (u) => u.id === id);
 
-const pushDB = async (user) => {
-  await db.push(user)
-  return user;
+const pushDB = async (board) => {
+  await db.push(board)
+  return board;
 };
 
-const update = async (user)=> {
-  const {id} = user
+const update = async (board)=> {
+  const {id} = board
   const indexUser = await db.findIndex((u) => u.id === id)
-  db[indexUser] = { ...user}
+  db[indexUser] = { ...board}
   return db[indexUser]
 }
 

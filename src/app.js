@@ -1,10 +1,19 @@
+// const fastify = require('fastify')({ logger: true });
+
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
-const userRouter = require('./resources/users/user.router');
+// const userRouter = require('./resources/users/user.router');
+
+// fastify.get('/', (req, reply) => {
+//   reply.send('Hello World!');
+// });
+
 
 const app = express();
+// app.register(userRouter);
+// app.register(boardRouter);
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
@@ -19,6 +28,6 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/users', userRouter);
+// app.use('/users', userRouter);
 
 module.exports = app;
