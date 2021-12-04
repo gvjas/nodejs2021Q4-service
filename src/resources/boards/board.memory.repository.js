@@ -1,9 +1,6 @@
 let db = []
 
-const getAll = async () => 
-  // TODO: mock implementation. should be replaced during task development
-   db
-;
+const getAll = async () => db;
 
 const getById = async (id) => db.find( (u) => u.id === id);
 

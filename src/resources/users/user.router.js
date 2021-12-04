@@ -46,7 +46,6 @@ const userRouter = async (fastify) => {
     let res = '';
     try {
       const buffers = []; 
-      /* eslint-disable-next-line */   
       for await (const chunk of payload) {
         buffers.push(chunk);
       }

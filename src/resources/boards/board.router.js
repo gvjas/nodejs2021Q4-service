@@ -11,7 +11,14 @@ const postItems = {
         required: ['title', 'columns'],
         properties: {
         title: {type: 'string'},
-        columns: {type: 'array'}
+        columns: {type: 'array', 
+          items: { type: 'object', 
+            properties: {
+              title: {type: 'string'}, 
+              order: {type: 'number'}
+            }
+          }
+        }
       }
     }
   }
@@ -24,7 +31,6 @@ const boardRouter = async (fastify)=> {
     let res = '';
     try {
       const buffers = []; 
-      /* eslint-disable-next-line */   
       for await (const chunk of payload) {
         buffers.push(chunk);
       }
