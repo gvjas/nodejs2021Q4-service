@@ -23,6 +23,11 @@ class Task {
     this.userId = userId
   }
 
+  setBoardId(boardId) {
+    this.boardId = boardId
+  }
+
+
 
   static toResponse(task) {
     const  { 
