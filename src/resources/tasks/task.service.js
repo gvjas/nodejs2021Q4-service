@@ -1,19 +1,15 @@
-const boardsRepo = require('../boards/board.memory.repository')
-const tasksRepo = require('./task.memory.repository');
+const boardsServices = require('../boards/board.service')
+const { tasksRepo } = require('./task.memory.repository');
 const handlers = require('../handlers');
 const Task = require('./task.model');
 
-const getAll = (boardId) => tasksRepo.getAll(boardId);
+const getAll = (boardId) => tasksRepo.getAllByBoardId(boardId);
 
 const delAll = (boardId) => tasksRepo.delAll(boardId);
 
 const getById = (id) => tasksRepo.getById(id);
 
-const pushDB = (boardId, task) => {
-    const newTask = new Task({...task})
-    newTask.setBoardId(boardId)
-    return tasksRepo.pushDB(newTask);
-}
+const pushDB = (task) => tasksRepo.pushDB(new Task({ ...task }));
 
 const update = (task) => tasksRepo.update(task);
 
@@ -34,8 +30,8 @@ const handlerPut = (req, res) =>
 const handlerDelete = (req, res) => 
     handlers.handlerDelete(req, res, getById, del)
 
-const handlerBoardId = (req, res) => 
-    handlers.handlerBoardId(req, res, boardsRepo.getById)
+const handlerValidId = (req, res) => 
+    handlers.handlerValidId(req, res, boardsServices.getById, getAll)
 
 const postItem = {
     schema: {
@@ -57,5 +53,5 @@ const postItem = {
   }
   
 
-module.exports = { getAll, pushDB, getById, update, del, delAll, setUserNull, postItem, 
-    handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerBoardId };
+module.exports = { delAll, setUserNull, postItem, 
+    handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId };

@@ -1,18 +1,18 @@
-const tasksService = require('./task.service');
+const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId } = require('./task.service');
 
 const taskRouter = async (fastify)=> {
 
-  fastify.addHook('onRequest', tasksService.handlerBoardId)
+  fastify.addHook('onRequest', handlerValidId)
 
-  fastify.get('/', tasksService.handlerGetAll)
+  fastify.get('/', handlerGetAll)
 
-  fastify.get('/:id', tasksService.handlerGetItem)
+  fastify.get('/:id', handlerGetItem)
 
-  fastify.post('/', tasksService.handlerPost)
+  fastify.post('/', handlerPost)
 
-  fastify.put('/:id', tasksService.handlerPut)
+  fastify.put('/:id', handlerPut)
 
-  fastify.delete(`/:id`, tasksService.handlerDelete)
+  fastify.delete(`/:id`, handlerDelete)
 
 }
 

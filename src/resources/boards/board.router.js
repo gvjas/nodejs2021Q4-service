@@ -1,17 +1,17 @@
-const boardsService = require('./board.service');
+const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, postItem } = require('./board.service');
 
 
 const boardRouter = async (fastify)=> {
 
-  fastify.get('/', boardsService.handlerGetAll);
+  fastify.get('/', handlerGetAll);
 
-  fastify.get('/:id', boardsService.handlerGetItem);
+  fastify.get('/:id', handlerGetItem);
 
-  fastify.post('/', boardsService.postItem, boardsService.handlerPost);
+  fastify.post('/', postItem, handlerPost);
 
-  fastify.put(`/:id`, boardsService.postItem, boardsService.handlerPut);
+  fastify.put(`/:id`, postItem, handlerPut);
 
-  fastify.delete(`/:id`, boardsService.handlerDelete);
+  fastify.delete(`/:id`, handlerDelete);
 }
 
 

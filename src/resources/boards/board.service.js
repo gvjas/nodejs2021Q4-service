@@ -1,6 +1,6 @@
-const boardsRepo = require('./board.memory.repository');
+const { boardsRepo } = require('./board.memory.repository');
 const Board = require('./board.model');
-const tasksService = require('../tasks/task.service');
+const { tasksRepo } = require('../tasks/task.memory.repository'); 
 const handlers = require('../handlers');
 
 const getAll = () => boardsRepo.getAll();
@@ -24,7 +24,7 @@ const handlerPut = (req, res) =>
     handlers.handlerPut(req, res, getById, update, Board.toResponse)
 
 const handlerDelete = (req, res) => 
-    handlers.handlerDelete(req, res, getById, del, tasksService.delAll)
+    handlers.handlerDelete(req, res, getById, del, tasksRepo.delAll)
 
 const postItem = {
     schema: {
@@ -46,5 +46,5 @@ const postItem = {
     }
   }
 
-module.exports = { getAll, pushDB, getById, update, del, handlerGetAll, 
+module.exports = { getAll, getById, handlerGetAll, 
     handlerGetItem, handlerPost, handlerPut, handlerDelete, postItem };

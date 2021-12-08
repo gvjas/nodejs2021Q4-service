@@ -1,17 +1,18 @@
-const usersService = require('./user.service');
+const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, 
+        handlerDelete, getItems, getItem, postItem } = require('./user.service');
 
 
 const userRouter = async (fastify) => {
 
-  fastify.get('/', usersService.getItems, usersService.handlerGetAll);
+  fastify.get('/', getItems, handlerGetAll);
 
-  fastify.get('/:id', usersService.getItem, usersService.handlerGetItem);
+  fastify.get('/:id', getItem, handlerGetItem);
 
-  fastify.post('/', usersService.postItem,  usersService.handlerPost);
+  fastify.post('/', postItem,  handlerPost);
 
-  fastify.put(`/:id`, usersService.postItem, usersService.handlerPut);
+  fastify.put(`/:id`, postItem, handlerPut);
 
-  fastify.delete(`/:id`, usersService.handlerDelete)
+  fastify.delete(`/:id`, handlerDelete)
 }
 
 

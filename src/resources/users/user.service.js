@@ -1,5 +1,5 @@
 const User = require('./user.model');
-const usersRepo = require('./user.memory.repository');
+const { usersRepo } = require('./user.memory.repository');
 const handlers = require('../handlers');
 const tasksService = require('../tasks/task.service');
 
@@ -69,5 +69,5 @@ const postItem = {
     }
 }
 
-module.exports = { getAll, pushDB, getById, update, del, handlerGetAll, 
-    handlerGetItem, handlerPost, handlerPut, handlerDelete, getItems, getItem, postItem };
+module.exports = { handlerGetAll, handlerGetItem, handlerPost, 
+    handlerPut, handlerDelete, getItems, getItem, postItem };
