@@ -1,6 +1,6 @@
-const Repository = require('../Repository')
+import Repository from '../Repository.js';
 
 
 const boardsRepo= new Repository()
 
-module.exports = {boardsRepo};
+export {boardsRepo};

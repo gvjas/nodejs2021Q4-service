@@ -1,6 +1,5 @@
-const uuidValidate = require('uuid').validate
-
-const { DEFAULT_HEADERS } = require('./constants');
+import { validate as uuidValidate } from 'uuid';
+import { DEFAULT_HEADERS } from './constants.js';
 
 const isUuid = (id) => uuidValidate(id);
 
@@ -11,4 +10,4 @@ const responseCodeMesssage = (res, code, message) => {
         .send(JSON.stringify(message))    
 }
 
-module.exports = { isUuid, responseCodeMesssage }
+export { isUuid, responseCodeMesssage };

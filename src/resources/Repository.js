@@ -33,4 +33,4 @@ class Repository {
   }
 }
 
-module.exports = Repository
+export default Repository;

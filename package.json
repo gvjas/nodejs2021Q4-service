@@ -5,7 +5,7 @@
     "type": "git",
     "url": ""
   },
-  "type": "commonjs",
+  "type": "module",
   "description": "REST service starter for RS School",
   "main": "src/server.js",
   "scripts": {
@@ -44,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "5to6-codemod": "^1.8.0",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "fastify": "^3.24.1",

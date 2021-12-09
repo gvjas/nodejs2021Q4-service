@@ -1,4 +1,11 @@
-const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, postItem } = require('./board.service');
+import {
+  handlerGetAll,
+  handlerGetItem,
+  handlerPost,
+  handlerPut,
+  handlerDelete,
+  postItem,
+} from './board.service.js';
 
 
 const boardRouter = async (fastify)=> {
@@ -15,4 +22,4 @@ const boardRouter = async (fastify)=> {
 }
 
 
-module.exports = boardRouter;
+export default boardRouter;

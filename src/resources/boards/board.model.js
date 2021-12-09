@@ -1,6 +1,5 @@
-const uuid = require('uuid').v4;
-
-const Column = require('../columns/column.model')
+import { v4 as uuid } from 'uuid';
+import Column from '../columns/column.model.js';
 
 class Board {
   constructor({
@@ -22,4 +21,4 @@ class Board {
   }
 }
 
-module.exports = Board;
+export default Board;

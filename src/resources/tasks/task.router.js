@@ -1,4 +1,11 @@
-const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId } = require('./task.service');
+import {
+  handlerGetAll,
+  handlerGetItem,
+  handlerPost,
+  handlerPut,
+  handlerDelete,
+  handlerValidId,
+} from './task.service.js';
 
 const taskRouter = async (fastify)=> {
 
@@ -17,4 +24,4 @@ const taskRouter = async (fastify)=> {
 }
 
 
-module.exports = taskRouter;
+export default taskRouter;

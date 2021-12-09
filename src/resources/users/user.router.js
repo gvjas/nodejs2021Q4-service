@@ -1,5 +1,13 @@
-const { handlerGetAll, handlerGetItem, handlerPost, handlerPut, 
-        handlerDelete, getItems, getItem, postItem } = require('./user.service');
+import {
+  handlerGetAll,
+  handlerGetItem,
+  handlerPost,
+  handlerPut,
+  handlerDelete,
+  getItems,
+  getItem,
+  postItem,
+} from './user.service.js';
 
 
 const userRouter = async (fastify) => {
@@ -16,4 +24,4 @@ const userRouter = async (fastify) => {
 }
 
 
-module.exports = userRouter;
+export default userRouter;

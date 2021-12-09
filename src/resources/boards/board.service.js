@@ -1,7 +1,7 @@
-const { boardsRepo } = require('./board.memory.repository');
-const Board = require('./board.model');
-const { tasksRepo } = require('../tasks/task.memory.repository'); 
-const handlers = require('../handlers');
+import { boardsRepo } from './board.memory.repository.js';
+import Board from './board.model.js';
+import { tasksRepo } from '../tasks/task.memory.repository.js';
+import handlers from '../handlers.js';
 
 const getAll = () => boardsRepo.getAll();
 
@@ -46,5 +46,5 @@ const postItem = {
     }
   }
 
-module.exports = { getAll, getById, handlerGetAll, 
+export { getAll, getById, handlerGetAll, 
     handlerGetItem, handlerPost, handlerPut, handlerDelete, postItem };

@@ -1,7 +1,7 @@
-const User = require('./user.model');
-const { usersRepo } = require('./user.memory.repository');
-const handlers = require('../handlers');
-const tasksService = require('../tasks/task.service');
+import User from './user.model.js';
+import { usersRepo } from './user.memory.repository.js';
+import handlers from '../handlers.js';
+import { setUserNull } from '../tasks/task.service.js';
 
 const getAll = () => usersRepo.getAll();
 
@@ -24,7 +24,7 @@ const handlerPut = (req, res) =>
     handlers.handlerPut(req, res, getById, update, User.toResponse)
 
 const handlerDelete = (req, res) => 
-    handlers.handlerDelete(req, res, getById, del, tasksService.setUserNull)
+    handlers.handlerDelete(req, res, getById, del, setUserNull)
 
 const itemForGet = {
     type: 'object',
@@ -69,5 +69,5 @@ const postItem = {
     }
 }
 
-module.exports = { handlerGetAll, handlerGetItem, handlerPost, 
+export { handlerGetAll, handlerGetItem, handlerPost, 
     handlerPut, handlerDelete, getItems, getItem, postItem };

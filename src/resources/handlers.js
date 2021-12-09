@@ -1,6 +1,6 @@
 
-const { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } = require('./constants');
-const { responseCodeMesssage, isUuid } = require('./utils')
+import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } from './constants.js';
+import { responseCodeMesssage, isUuid } from './utils.js';
 
 
 const handlerId = async (req, res, getById, id) => {
@@ -100,4 +100,4 @@ const handlerValidId = async (req, res, getByBoardId, getAll) => {
   }
 }
 
-module.exports = { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId } 
+export default { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId }; 

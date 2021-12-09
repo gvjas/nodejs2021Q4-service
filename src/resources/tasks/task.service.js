@@ -1,7 +1,7 @@
-const boardsServices = require('../boards/board.service')
-const { tasksRepo } = require('./task.memory.repository');
-const handlers = require('../handlers');
-const Task = require('./task.model');
+import { getById as getByBoardId } from '../boards/board.service.js';
+import { tasksRepo } from './task.memory.repository.js';
+import handlers from '../handlers.js';
+import Task from './task.model.js';
 
 const getAll = (boardId) => tasksRepo.getAllByBoardId(boardId);
 
@@ -31,7 +31,7 @@ const handlerDelete = (req, res) =>
     handlers.handlerDelete(req, res, getById, del)
 
 const handlerValidId = (req, res) => 
-    handlers.handlerValidId(req, res, boardsServices.getById, getAll)
+    handlers.handlerValidId(req, res, getByBoardId, getAll)
 
 const postItem = {
     schema: {
@@ -51,7 +51,7 @@ const postItem = {
       }
     }
   }
-  
 
-module.exports = { delAll, setUserNull, postItem, 
+
+export { delAll, setUserNull, postItem, 
     handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId };

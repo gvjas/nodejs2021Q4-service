@@ -1,4 +1,4 @@
-const Repository = require('../Repository')
+import Repository from '../Repository.js';
 
 
 const tasksRepo= new Repository()
@@ -11,7 +11,7 @@ tasksRepo.delAll = async (boardId) => {
   tasksRepo.db = await tasksRepo.db.filter( (t) => t.boardId !== boardId);
 }
 
-module.exports = { tasksRepo };
+export { tasksRepo };
 
 
 
