@@ -5,25 +5,26 @@ import handlers from '../handlers.js';
 
 const getAll = () => boardsRepo.getAll();
 
-const getById = (id) => boardsRepo.getById(id);
+const getById = (id: any) => boardsRepo.getById(id);
 
-const pushDB = (board) => boardsRepo.pushDB(new Board({...board}));
+const pushDB = (board: any) => boardsRepo.pushDB(new Board({...board}));
 
-const update = (board) => boardsRepo.update(board);
+const update = (board: any) => boardsRepo.update(board);
 
-const del = (id) => boardsRepo.del(id);
+const del = (id: any) => boardsRepo.del(id);
 
-const handlerGetAll = (req, res) => handlers.handlerGetAll(req, res, getAll)
+const handlerGetAll = (req: any, res: any) => handlers.handlerGetAll(req, res, getAll)
 
-const handlerGetItem = (req, res) => handlers.handlerGetItem(req, res, getById)
+const handlerGetItem = (req: any, res: any) => handlers.handlerGetItem(req, res, getById)
 
-const handlerPost = (req, res) => 
+const handlerPost = (req: any, res: any) => 
     handlers.handlerPost(req, res, pushDB, Board.toResponse)
 
-const handlerPut = (req, res) => 
+const handlerPut = (req: any, res: any) => 
     handlers.handlerPut(req, res, getById, update, Board.toResponse)
 
-const handlerDelete = (req, res) => 
+const handlerDelete = (req: any, res: any) => 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
     handlers.handlerDelete(req, res, getById, del, tasksRepo.delAll)
 
 const postItem = {

@@ -3,34 +3,36 @@ import { tasksRepo } from './task.memory.repository.js';
 import handlers from '../handlers.js';
 import Task from './task.model.js';
 
-const getAll = (boardId) => tasksRepo.getAllByBoardId(boardId);
+const getAll = (boardId: any) => tasksRepo.getAllByBoardId(boardId);
 
-const delAll = (boardId) => tasksRepo.delAll(boardId);
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
+const delAll = (boardId: any) => tasksRepo.delAll(boardId);
 
-const getById = (id) => tasksRepo.getById(id);
+const getById = (id: any) => tasksRepo.getById(id);
 
-const pushDB = (task) => tasksRepo.pushDB(new Task({ ...task }));
+const pushDB = (task: any) => tasksRepo.pushDB(new Task({ ...task }));
 
-const update = (task) => tasksRepo.update(task);
+const update = (task: any) => tasksRepo.update(task);
 
-const del = (id) => tasksRepo.del(id);
+const del = (id: any) => tasksRepo.del(id);
 
-const setUserNull = (userId) => tasksRepo.setUserNull(userId);
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'setUserNull' does not exist on type 'Rep... Remove this comment to see the full error message
+const setUserNull = (userId: any) => tasksRepo.setUserNull(userId);
 
-const handlerGetAll = (req, res) => handlers.handlerGetAll(req, res, getAll)
+const handlerGetAll = (req: any, res: any) => handlers.handlerGetAll(req, res, getAll)
 
-const handlerGetItem = (req, res) => handlers.handlerGetItem(req, res, getById)
+const handlerGetItem = (req: any, res: any) => handlers.handlerGetItem(req, res, getById)
 
-const handlerPost = (req, res) => 
+const handlerPost = (req: any, res: any) => 
     handlers.handlerPost(req, res, pushDB, Task.toResponse)
 
-const handlerPut = (req, res) => 
+const handlerPut = (req: any, res: any) => 
     handlers.handlerPut(req, res, getById, update, Task.toResponse)
 
-const handlerDelete = (req, res) => 
+const handlerDelete = (req: any, res: any) => 
     handlers.handlerDelete(req, res, getById, del)
 
-const handlerValidId = (req, res) => 
+const handlerValidId = (req: any, res: any) => 
     handlers.handlerValidId(req, res, getByBoardId, getAll)
 
 const postItem = {

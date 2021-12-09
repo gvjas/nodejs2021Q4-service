@@ -8,7 +8,7 @@ import {
 } from './board.service.js';
 
 
-const boardRouter = async (fastify)=> {
+const boardRouter = async (fastify: any) => {
 
   fastify.get('/', handlerGetAll);
 

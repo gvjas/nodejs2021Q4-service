@@ -10,7 +10,7 @@ import {
 } from './user.service.js';
 
 
-const userRouter = async (fastify) => {
+const userRouter = async (fastify: any) => {
 
   fastify.get('/', getItems, handlerGetAll);
 

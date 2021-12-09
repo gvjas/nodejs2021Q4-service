@@ -1,6 +1,14 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'uuid... Remove this comment to see the full error message
 import { v4 as uuid } from 'uuid';
 
 class Task {
+  boardId: any;
+  columnId: any;
+  description: any;
+  id: any;
+  order: any;
+  title: any;
+  userId: any;
   constructor({
     id = uuid(),
     title = 'TASK',
@@ -19,17 +27,17 @@ class Task {
     this.columnId = columnId
   }
 
-  setUserId(userId) {
+  setUserId(userId: any) {
     this.userId = userId
   }
 
-  setBoardId(boardId) {
+  setBoardId(boardId: any) {
     this.boardId = boardId
   }
 
 
 
-  static toResponse(task) {
+  static toResponse(task: any) {
     return task;
   }
 }

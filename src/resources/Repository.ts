@@ -1,4 +1,5 @@
 class Repository {
+  db: any;
   constructor() {
     this.db = []
   }
@@ -7,28 +8,28 @@ class Repository {
     return this.db
   }
 
-  async getAllByBoardId(boardId) {
-    return this.db.filter( (t) => t.boardId === boardId);
+  async getAllByBoardId(boardId: any) {
+    return this.db.filter( (t: any) => t.boardId === boardId);
   }
 
-  async getById(id) {
-    return this.db.find((it) => it.id === id)
+  async getById(id: any) {
+    return this.db.find((it: any) => it.id === id);
   }
 
-  async pushDB(item) {
+  async pushDB(item: any) {
     await this.db.push(item)
     return item;
   }
 
-  async update(item) {
+  async update(item: any) {
     const { id } = item;
-    const indexItem = await this.db.findIndex((it) => it.id === id)
+    const indexItem = await this.db.findIndex((it: any) => it.id === id)
     this.db[indexItem] = { ...item}
     return this.db[indexItem]
   }
 
-  async del(id) {
-    this.db = await this.db.filter((it) => it.id !== id)
+  async del(id: any) {
+    this.db = await this.db.filter((it: any) => it.id !== id)
       
   }
 }

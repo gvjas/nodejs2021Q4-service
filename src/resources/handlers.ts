@@ -3,7 +3,7 @@ import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } from './constants.js';
 import { responseCodeMesssage, isUuid } from './utils.js';
 
 
-const handlerId = async (req, res, getById, id) => {
+const handlerId = async (req: any, res: any, getById: any, id: any) => {
     if (!isUuid(id)) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_VALID,
         HTTP_RESPOSE_MESSAGES.NOT_VALID)
@@ -16,7 +16,7 @@ const handlerId = async (req, res, getById, id) => {
     return item
 }
 
-const handlerGetAll = async (req, res, getAll) => {
+const handlerGetAll = async (req: any, res: any, getAll: any) => {
   try {
     const { boardId } = req.params
     const items = await getAll(boardId)
@@ -27,7 +27,7 @@ const handlerGetAll = async (req, res, getAll) => {
   }
 }
 
-const handlerGetItem = async (req, res, getById) => {
+const handlerGetItem = async (req: any, res: any, getById: any) => {
   try {
     const { id } = req.params
     const item = await handlerId(req, res, getById, id)
@@ -38,7 +38,7 @@ const handlerGetItem = async (req, res, getById) => {
   }
 }
 
-const handlerPost = async (req, res, pushDB, toResponse) => {
+const handlerPost = async (req: any, res: any, pushDB: any, toResponse: any) => {
   try {
     const { boardId } = req.params
     if (boardId) { req.body.boardId = boardId }
@@ -51,7 +51,7 @@ const handlerPost = async (req, res, pushDB, toResponse) => {
 }
 
 
-const handlerPut = async (req, res, getById, update, toResponse) => {
+const handlerPut = async (req: any, res: any, getById: any, update: any, toResponse: any) => {
   try {
     const { id } = req.params
     const item = await handlerId(req, res, getById, id)
@@ -66,11 +66,12 @@ const handlerPut = async (req, res, getById, update, toResponse) => {
 }
 
 
-const handlerDelete = async (req, res, getById, del, callback='') => {
+const handlerDelete = async (req: any, res: any, getById: any, del: any, callback='') => {
   try {
     const { id } = req.params
     await handlerId(req, res, getById, id)
     if (callback) {
+        // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
         await callback(id)
     }
     await del(id)
@@ -83,13 +84,13 @@ const handlerDelete = async (req, res, getById, del, callback='') => {
 
 }
 
-const handlerValidId = async (req, res, getByBoardId, getAll) => {
+const handlerValidId = async (req: any, res: any, getByBoardId: any, getAll: any) => {
   try {
     const { boardId, id } = req.params
     await handlerId(req, res, getByBoardId, boardId)
     const tasks = await getAll(boardId)
     
-    const task = await tasks.find((it) => it.id === id)
+    const task = await tasks.find((it: any) => it.id === id)
     if (id && !task) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
         HTTP_RESPOSE_MESSAGES.NOT_FOUND)

@@ -10,12 +10,14 @@ import taskRouter from './resources/tasks/task.router.js';
 
 const fastify = fastifyFactory({ logger: true });
 
+// @ts-expect-error ts-migrate(1343) FIXME: The 'import.meta' meta-property is only allowed wh... Remove this comment to see the full error message
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 fastify.register(userRouter, { prefix: '/users' });
 fastify.register(boardRouter, { prefix: '/boards'});
 fastify.register(taskRouter, { prefix: '/boards/:boardId/tasks' })
 
+// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
 fastify.register(swagger, {
   exposeRoute: true,
   routePrefix: '/doc',
