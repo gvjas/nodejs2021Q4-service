@@ -1,7 +1,7 @@
-import User from './user.model.js';
-import { usersRepo } from './user.memory.repository.js';
-import handlers from '../handlers.js';
-import { setUserNull } from '../tasks/task.service.js';
+import User from './user.model';
+import { usersRepo } from './user.memory.repository';
+import handlers from '../handlers';
+import { setUserNull } from '../tasks/task.service';
 
 const getAll = () => usersRepo.getAll();
 
@@ -24,7 +24,6 @@ const handlerPut = (req: any, res: any) =>
     handlers.handlerPut(req, res, getById, update, User.toResponse)
 
 const handlerDelete = (req: any, res: any) => 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(userId: any) => any' is not ass... Remove this comment to see the full error message
     handlers.handlerDelete(req, res, getById, del, setUserNull)
 
 const itemForGet = {

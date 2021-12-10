@@ -7,7 +7,7 @@ import {
   getItems,
   getItem,
   postItem,
-} from './user.service.js';
+} from './user.service';
 
 
 const userRouter = async (fastify: any) => {

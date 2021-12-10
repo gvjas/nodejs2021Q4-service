@@ -5,7 +5,7 @@ import {
   handlerPut,
   handlerDelete,
   postItem,
-} from './board.service.js';
+} from './board.service';
 
 
 const boardRouter = async (fastify: any) => {

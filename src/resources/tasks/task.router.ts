@@ -5,7 +5,7 @@ import {
   handlerPut,
   handlerDelete,
   handlerValidId,
-} from './task.service.js';
+} from './task.service';
 
 const taskRouter = async (fastify: any) => {
 

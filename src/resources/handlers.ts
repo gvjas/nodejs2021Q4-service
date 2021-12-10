@@ -1,6 +1,6 @@
 
-import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } from './constants.js';
-import { responseCodeMesssage, isUuid } from './utils.js';
+import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } from './constants';
+import { responseCodeMesssage, isUuid } from './utils';
 
 
 const handlerId = async (req: any, res: any, getById: any, id: any) => {
@@ -66,12 +66,11 @@ const handlerPut = async (req: any, res: any, getById: any, update: any, toRespo
 }
 
 
-const handlerDelete = async (req: any, res: any, getById: any, del: any, callback='') => {
+const handlerDelete = async (req: any, res: any, getById: any, del: any, callback: any | undefined) => {
   try {
     const { id } = req.params
     await handlerId(req, res, getById, id)
     if (callback) {
-        // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
         await callback(id)
     }
     await del(id)

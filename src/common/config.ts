@@ -1,20 +1,17 @@
 import dotenv from 'dotenv';
-import path, { dirname } from 'path';
-
-import { fileURLToPath } from 'url';
-
-// @ts-expect-error ts-migrate(1343) FIXME: The 'import.meta' meta-property is only allowed wh... Remove this comment to see the full error message
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import path from 'path';
 
 dotenv.config({
   path: path.join(__dirname, '../../.env')
 });
 
-export default {
+const configConst = {
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   MONGO_CONNECTION_STRING: process.env.MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   AUTH_MODE: process.env.AUTH_MODE === 'true'
 };
+
+export { configConst }
 

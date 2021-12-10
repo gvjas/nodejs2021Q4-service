@@ -1,7 +1,7 @@
-import { getById as getByBoardId } from '../boards/board.service.js';
-import { tasksRepo } from './task.memory.repository.js';
-import handlers from '../handlers.js';
-import Task from './task.model.js';
+import { getById as getByBoardId } from '../boards/board.service';
+import tasksRepo from './task.memory.repository';
+import handlers from '../handlers';
+import Task from './task.model';
 
 const getAll = (boardId: any) => tasksRepo.getAllByBoardId(boardId);
 
@@ -30,7 +30,7 @@ const handlerPut = (req: any, res: any) =>
     handlers.handlerPut(req, res, getById, update, Task.toResponse)
 
 const handlerDelete = (req: any, res: any) => 
-    handlers.handlerDelete(req, res, getById, del)
+    handlers.handlerDelete(req, res, getById, del, undefined)
 
 const handlerValidId = (req: any, res: any) => 
     handlers.handlerValidId(req, res, getByBoardId, getAll)

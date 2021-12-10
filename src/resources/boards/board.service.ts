@@ -1,7 +1,7 @@
-import { boardsRepo } from './board.memory.repository.js';
-import Board from './board.model.js';
-import { tasksRepo } from '../tasks/task.memory.repository.js';
-import handlers from '../handlers.js';
+import { boardsRepo } from './board.memory.repository';
+import Board from './board.model';
+import tasksRepo from '../tasks/task.memory.repository';
+import handlers from '../handlers';
 
 const getAll = () => boardsRepo.getAll();
 

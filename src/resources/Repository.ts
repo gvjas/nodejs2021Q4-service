@@ -1,5 +1,6 @@
 class Repository {
   db: any;
+
   constructor() {
     this.db = []
   }

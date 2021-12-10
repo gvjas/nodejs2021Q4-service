@@ -1,17 +1,14 @@
 import fastifyFactory from 'fastify';
-import path, { dirname } from 'path';
+import path from 'path';
 import swagger from 'fastify-swagger'
 
-import { fileURLToPath } from 'url';
-
-import userRouter from './resources/users/user.router.js';
-import boardRouter from './resources/boards/board.router.js';
-import taskRouter from './resources/tasks/task.router.js';
+import userRouter from './resources/users/user.router';
+import boardRouter from './resources/boards/board.router';
+import taskRouter from './resources/tasks/task.router';
 
 const fastify = fastifyFactory({ logger: true });
 
-// @ts-expect-error ts-migrate(1343) FIXME: The 'import.meta' meta-property is only allowed wh... Remove this comment to see the full error message
-const __dirname = dirname(fileURLToPath(import.meta.url));
+
 
 fastify.register(userRouter, { prefix: '/users' });
 fastify.register(boardRouter, { prefix: '/boards'});

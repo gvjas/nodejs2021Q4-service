@@ -13,10 +13,22 @@
       "impliedStrict": true
     }
   },
+  "plugins": ["@typescript-eslint"],
   "settings": {
-    "noInlineConfig": true
+    "noInlineConfig": true,
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    },
+    "node": {
+      "allowModules": ["electron"],
+      "resolvePaths": ["__dirname"],
+      "tryExtensions": [".js", ".ts"]
+    }
   },
   "extends": [
+    "plugin:@typescript-eslint/recommended",
     "eslint:recommended",
     "plugin:node/recommended",
     "airbnb-base",

@@ -1,4 +1,4 @@
-import Repository from '../Repository.js';
+import Repository from '../Repository';
 
 
 const tasksRepo= new Repository()
@@ -13,7 +13,7 @@ tasksRepo.delAll = async (boardId: any) => {
   tasksRepo.db = await tasksRepo.db.filter( (t: any) => t.boardId !== boardId);
 }
 
-export { tasksRepo };
+export default tasksRepo;
 
 
 
