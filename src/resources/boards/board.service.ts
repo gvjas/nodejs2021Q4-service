@@ -1,29 +1,35 @@
+import { FastifyReply } from 'fastify'
+
 import { boardsRepo } from './board.memory.repository';
 import Board from './board.model';
-import tasksRepo from '../tasks/task.memory.repository';
-import handlers from '../handlers';
+import * as tasksRepo from '../tasks/task.memory.repository';
+import handlers, { CustomRequest} from '../handlers';
 
-const getAll = () => boardsRepo.getAll();
+const getAll = (): Promise<(Board|undefined)[]> => boardsRepo.getAll();
 
-const getById = (id: any) => boardsRepo.getById(id);
+const getById = (id?: string): Promise<Board|undefined> => boardsRepo.getById(id);
 
-const pushDB = (board: any) => boardsRepo.pushDB(new Board({...board}));
+const pushDB = (board: {[key: string]: (string | number | null | undefined | object)}): 
+  Promise<Board> => boardsRepo.pushDB(new Board({ ...board }));
 
-const update = (board: any) => boardsRepo.update(board);
+const update = (board: {[key: string]: (string | number | null | undefined | object)}): 
+  Promise<Board|void> => boardsRepo.update(new Board({ ...board }));
 
-const del = (id: any) => boardsRepo.del(id);
+const del = (id: string): Promise<void> => boardsRepo.del(id);
 
-const handlerGetAll = (req: any, res: any) => handlers.handlerGetAll(req, res, getAll)
+const handlerGetAll = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+  handlers.handlerGetAll(req, res, getAll)
 
-const handlerGetItem = (req: any, res: any) => handlers.handlerGetItem(req, res, getById)
+const handlerGetItem = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+  handlers.handlerGetItem(req, res, getById)
 
-const handlerPost = (req: any, res: any) => 
+const handlerPost = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPost(req, res, pushDB, Board.toResponse)
 
-const handlerPut = (req: any, res: any) => 
+const handlerPut = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPut(req, res, getById, update, Board.toResponse)
 
-const handlerDelete = (req: any, res: any) => 
+const handlerDelete = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
     handlers.handlerDelete(req, res, getById, del, tasksRepo.delAll)
 

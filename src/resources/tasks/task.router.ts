@@ -1,3 +1,5 @@
+import { FastifyInstance } from 'fastify'
+
 import {
   handlerGetAll,
   handlerGetItem,
@@ -7,7 +9,7 @@ import {
   handlerValidId,
 } from './task.service';
 
-const taskRouter = async (fastify: any) => {
+const taskRouter = async (fastify: FastifyInstance): Promise<void> => {
 
   fastify.addHook('onRequest', handlerValidId)
 

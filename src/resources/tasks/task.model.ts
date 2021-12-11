@@ -1,19 +1,19 @@
 import { v4 as uuid } from 'uuid';
 
 class Task {
-  boardId: any;
+  boardId: string;
 
-  columnId: any;
+  columnId?: string | null;
 
-  description: any;
+  description: string;
 
-  id: any;
+  id: string;
 
-  order: any;
+  order: number;
 
-  title: any;
+  title: string;
 
-  userId: any;
+  userId?: string | null;
 
   constructor({
     id = uuid(),
@@ -33,17 +33,17 @@ class Task {
     this.columnId = columnId
   }
 
-  setUserId(userId: any) {
+  setUserId(userId: string | null): void {
     this.userId = userId
   }
 
-  setBoardId(boardId: any) {
+  setBoardId(boardId: string): void {
     this.boardId = boardId
   }
 
 
 
-  static toResponse(task: any) {
+  static toResponse(task: Task): Task {
     return task;
   }
 }

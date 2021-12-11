@@ -1,11 +1,11 @@
 import { v4 as uuid } from 'uuid';
 
 class Column {
-  id: any;
+  id: string;
 
-  order: any;
+  order: number;
 
-  title: any;
+  title: string;
 
   constructor({
     id = uuid(),
@@ -17,9 +17,8 @@ class Column {
     this.order = order;
   }
 
-  static toResponse(user: any) {
-    const { id, title, order } = user;
-    return { id, title, order };
+  static toResponse(column: Column): Column {
+    return column;
   }
 }
 

@@ -1,39 +1,45 @@
+import { FastifyReply } from 'fastify'
+
 import { getById as getByBoardId } from '../boards/board.service';
 import tasksRepo from './task.memory.repository';
-import handlers from '../handlers';
+import handlers, { CustomRequest} from '../handlers';
 import Task from './task.model';
 
-const getAll = (boardId: any) => tasksRepo.getAllByBoardId(boardId);
+const getAllByBoardId = (boardId?: string|undefined): Promise<(Task|undefined)[]> => tasksRepo.getAllByBoardId(boardId);
 
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
-const delAll = (boardId: any) => tasksRepo.delAll(boardId);
+const delAll = (boardId: string): void => tasksRepo.delAll(boardId);
 
-const getById = (id: any) => tasksRepo.getById(id);
+const getById = (id?: string): Promise<Task|undefined> => tasksRepo.getById(id);
 
-const pushDB = (task: any) => tasksRepo.pushDB(new Task({ ...task }));
+const pushDB = (task: {[key: string]: (string | number | null | undefined | object)}): Promise<Task> => 
+  tasksRepo.pushDB(new Task({ ...task }));
 
-const update = (task: any) => tasksRepo.update(task);
+const update = (task: {[key: string]: (string | number | null | undefined | object)}): Promise<Task|void> => 
+                tasksRepo.update(new Task({ ...task }));
 
-const del = (id: any) => tasksRepo.del(id);
+const del = (id?: string): Promise<void> => tasksRepo.del(id);
 
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'setUserNull' does not exist on type 'Rep... Remove this comment to see the full error message
-const setUserNull = (userId: any) => tasksRepo.setUserNull(userId);
+const setUserNull = (userId: string): void => tasksRepo.setUserNull(userId);
 
-const handlerGetAll = (req: any, res: any) => handlers.handlerGetAll(req, res, getAll)
+const handlerGetAll = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+  handlers.handlerGetAll(req, res, getAllByBoardId)
 
-const handlerGetItem = (req: any, res: any) => handlers.handlerGetItem(req, res, getById)
+const handlerGetItem = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+  handlers.handlerGetItem(req, res, getById)
 
-const handlerPost = (req: any, res: any) => 
+const handlerPost = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPost(req, res, pushDB, Task.toResponse)
 
-const handlerPut = (req: any, res: any) => 
+const handlerPut = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPut(req, res, getById, update, Task.toResponse)
 
-const handlerDelete = (req: any, res: any) => 
+const handlerDelete = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerDelete(req, res, getById, del, undefined)
 
-const handlerValidId = (req: any, res: any) => 
-    handlers.handlerValidId(req, res, getByBoardId, getAll)
+const handlerValidId = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+    handlers.handlerValidId(req, res, getByBoardId, getAllByBoardId)
 
 const postItem = {
     schema: {
@@ -43,12 +49,12 @@ const postItem = {
           'order', 
           'description' ],
           properties: {
-          title: {type: 'string'},
-          order: {type: 'number'}, 
-          description: {type: 'string'}, 
-          userId: {type: ['string','null']},
-          boardId: {type: 'string'}, 
-          columnId: {type: ['string','null']} 
+            title: {type: 'string'},
+            order: {type: 'number'}, 
+            description: {type: 'string'}, 
+            userId: {type: ['string','null']},
+            boardId: {type: 'string'}, 
+            columnId: {type: ['string','null']} 
         }
       }
     }

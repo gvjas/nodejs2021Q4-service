@@ -1,30 +1,31 @@
 import { v4 as uuid } from 'uuid';
 import Column from '../columns/column.model';
 
+
 class Board {
-  column: any;
+  column?: Column;
 
-  columns: any;
+  columns: (Column|undefined)[];
 
-  id: any;
+  id: string;
 
-  title: any;
+  title: string;
 
   constructor({
     id = uuid(),
     title = 'BOARD',
-    columns =  [new Column()]
+    columns =  []
   } = {}) {
     this.id = id;
     this.title = title;
-    this.columns = columns;
+    this.columns = columns.map((c): Column => new Column(c));
   }
 
-  setColumn(column: any) {
-    this.column = column
+  setColumn(column: { order: number, title: string }): void {
+    this.column = new Column(column)
   }
 
-  static toResponse(board: any) {
+  static toResponse(board: Board): Board {
     return board;
   }
 }

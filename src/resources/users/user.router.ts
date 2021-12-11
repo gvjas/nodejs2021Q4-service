@@ -1,3 +1,5 @@
+import { FastifyInstance } from 'fastify'
+
 import {
   handlerGetAll,
   handlerGetItem,
@@ -10,7 +12,7 @@ import {
 } from './user.service';
 
 
-const userRouter = async (fastify: any) => {
+const userRouter = async (fastify: FastifyInstance): Promise<void> => {
 
   fastify.get('/', getItems, handlerGetAll);
 

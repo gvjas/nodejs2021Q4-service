@@ -1,29 +1,36 @@
+import { FastifyReply } from 'fastify'
+
 import User from './user.model';
 import { usersRepo } from './user.memory.repository';
-import handlers from '../handlers';
+import handlers, { CustomRequest } from '../handlers';
 import { setUserNull } from '../tasks/task.service';
 
-const getAll = () => usersRepo.getAll();
 
-const getById = (id: any) => usersRepo.getById(id);
+const getAll = (): Promise<(User|void)[]> => usersRepo.getAll();
 
-const pushDB = (user: any) => usersRepo.pushDB(new User({ ...user }));
+const getById = (id?: string): Promise<User|void> => usersRepo.getById(id);
 
-const update = (user: any) => usersRepo.update(user);
+const pushDB = (user: {[key: string]: (string | number | null | undefined | object)}): Promise<User> => 
+    usersRepo.pushDB(new User({ ...user }));
 
-const del = (id: any) => usersRepo.del(id);
+const update = (user: {[key: string]: (string | number | null | undefined | object)}): Promise<User|void> => 
+    usersRepo.update(new User({ ...user }));
 
-const handlerGetAll = (req: any, res: any) => handlers.handlerGetAll(req, res, getAll)
+const del = (id?: string): Promise<void> => usersRepo.del(id);
 
-const handlerGetItem = (req: any, res: any) => handlers.handlerGetItem(req, res, getById)
+const handlerGetAll = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+    handlers.handlerGetAll(req, res, getAll)
 
-const handlerPost = (req: any, res: any) => 
+const handlerGetItem = (req: CustomRequest, res: FastifyReply): Promise<void> => 
+    handlers.handlerGetItem(req, res, getById)
+
+const handlerPost = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPost(req, res, pushDB, User.toResponse)
 
-const handlerPut = (req: any, res: any) => 
+const handlerPut = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPut(req, res, getById, update, User.toResponse)
 
-const handlerDelete = (req: any, res: any) => 
+const handlerDelete = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerDelete(req, res, getById, del, setUserNull)
 
 const itemForGet = {

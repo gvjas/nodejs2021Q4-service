@@ -1,4 +1,4 @@
-import fastifyFactory from 'fastify';
+import fastifyFactory, { FastifyInstance } from 'fastify';
 import path from 'path';
 import swagger from 'fastify-swagger'
 
@@ -6,7 +6,7 @@ import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 
-const fastify = fastifyFactory({ logger: true });
+const fastify: FastifyInstance = fastifyFactory({ logger: true });
 
 
 
