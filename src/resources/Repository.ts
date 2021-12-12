@@ -1,6 +1,6 @@
 export interface IidWise {
   boardId?: string;
-  id?: string;
+  id: string;
 }
 
 class Repository<T extends IidWise> {
@@ -18,7 +18,7 @@ class Repository<T extends IidWise> {
     return this.db.filter( (t: T|undefined): boolean|void => t && t.boardId === boardId);
   }
 
-  async getById(id?: string): Promise<T|undefined> {
+  async getById(id: string): Promise<T|undefined> {
     return this.db.find((it: T|undefined): boolean|void => it && it.id === id);
   }
 

@@ -2,18 +2,18 @@ import { FastifyReply } from 'fastify'
 
 import User from './user.model';
 import { usersRepo } from './user.memory.repository';
-import handlers, { CustomRequest } from '../handlers';
+import handlers, { CustomRequest, Obj } from '../handlers';
 import { setUserNull } from '../tasks/task.service';
 
 
 const getAll = (): Promise<(User|void)[]> => usersRepo.getAll();
 
-const getById = (id?: string): Promise<User|void> => usersRepo.getById(id);
+const getById = (id: string): Promise<User|void> => usersRepo.getById(id);
 
-const pushDB = (user: {[key: string]: (string | number | null | undefined | object)}): Promise<User> => 
+const pushDB = (user: Obj): Promise<User> => 
     usersRepo.pushDB(new User({ ...user }));
 
-const update = (user: {[key: string]: (string | number | null | undefined | object)}): Promise<User|void> => 
+const update = (user: Obj): Promise<User|void> => 
     usersRepo.update(new User({ ...user }));
 
 const del = (id?: string): Promise<void> => usersRepo.del(id);

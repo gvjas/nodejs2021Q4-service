@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 class Task {
   boardId: string;
 
-  columnId?: string | null;
+  columnId: string | null;
 
   description: string;
 
@@ -13,7 +13,7 @@ class Task {
 
   title: string;
 
-  userId?: string | null;
+  userId: string | null;
 
   constructor({
     id = uuid(),
@@ -21,7 +21,7 @@ class Task {
     order = 0, 
     description = 'description', 
     userId = null,  // assignee
-    boardId = '', 
+    boardId = 'boardId', 
     columnId = null
   } = {}) {
     this.id = id

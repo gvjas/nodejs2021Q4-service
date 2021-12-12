@@ -4,40 +4,39 @@ import { validate as isUuid } from 'uuid';
 
 import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES, DEFAULT_HEADERS } from './constants';
 import { IidWise } from './Repository';
+import Column from './columns/column.model';
 
 
+export type Obj = {[key: string]: (string | number | null | (Column|undefined)[])}
 
 export type CustomRequest = FastifyRequest<{
-  Body: {[key: string]: (string | number | null | undefined | object)}
-  Params: { id?: string; boardId?: string }
-}>
+  Body: Obj
+  Params: { id: string; boardId: string }
+}> 
 
+type ResponseMessage = {[key: string]: string}
 
-const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | {[key: string]: (string | object)}): void => {
+const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | ResponseMessage): void => {
   res.status(code)
       .header('Content-Type', DEFAULT_HEADERS.TYPE_JSON)
       .send(JSON.stringify(message))    
 }
 
 const handlerId = async <T>(req: CustomRequest, res: FastifyReply, 
-  getById: (id?: string) => T, id?: string): 
+  getById: (id: string) => T|void, id: string): 
   Promise<T|void> => {
 
-    if (!id || !isUuid(id)) {
+    if (!isUuid(id)) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_VALID,
         HTTP_RESPOSE_MESSAGES.NOT_VALID)
     }
-    const item: T|void = await getById(id);
-    if (!item) {
-      responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
+    return await getById(id) || responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
         HTTP_RESPOSE_MESSAGES.NOT_FOUND)
-    }
-    return item
+    
 }
 
 const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply, 
   getAll: (boardId?: string) => Promise<(T|undefined)[]>): Promise<void> => {
-
   try {
     const { boardId } : { boardId?: string } = req.params
     const items: (T|undefined)[] = await getAll(boardId)
@@ -49,10 +48,10 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply, 
-  getById: (id?: string) => T): 
+  getById: (id: string) => T): 
   Promise<void> => {
   try {
-    const { id } : { id?: string} = req.params
+    const { id } : { id: string} = req.params
     const item: T|void = await handlerId(req, res, getById, id)
     res.send(item)
   } catch (e) {
@@ -62,8 +61,8 @@ const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 const handlerPost = async <T>(req: CustomRequest, res: FastifyReply, 
-  pushDB: (body:{[key: string]: (string | number | null | undefined | object)}) => Promise<T>, 
-  toResponse: (post: T) => (T | { [key: string]: (string | object) })): 
+  pushDB: (body:Obj) => Promise<T>, 
+  toResponse: (post: T) => (T | ResponseMessage)): 
   Promise<void> => {
   try {
     const { boardId } : { boardId?: string} = req.params
@@ -77,11 +76,11 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyReply, 
-  getById: (id?: string) => Promise<T|void>, 
-  update: (body:{[key: string]: (string | number | null | undefined | object)}) => Promise<T|void>, 
-  toResponse: (updateItem: T) => (T | { [key: string]: (string | object) })): Promise<void> => {
+  getById: (id: string) => Promise<T|void>, 
+  update: (body: Obj) => Promise<T|void>, 
+  toResponse: (updateItem: T) => (T | ResponseMessage)): Promise<void> => {
   try {
-    const { id } : { id?: string} = req.params
+    const { id } : { id: string} = req.params
     await handlerId(req, res, getById, id)
     const updateItem: (T|void) = await update(req.body)
     if (updateItem) {  
@@ -95,8 +94,8 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
 }
 
 const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply, 
-  getById: (id?: string) => Promise<T|void>, 
-  del: (id?: string) => Promise<void>, 
+  getById: (id: string) => Promise<T|void>, 
+  del: (id: string) => Promise<void>, 
   callback?: (boardId: string) => void): Promise<void> => {
   try {
     const { id } = req.params
@@ -114,8 +113,8 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: FastifyReply, 
-  getByBoardId: (boardId?: string) => U|void, 
-  getAll: (boardId?: string) => Promise<(T|undefined)[]>): 
+  getByBoardId: (boardId: string) => U|void, 
+  getAll: (boardId: string) => Promise<(T|undefined)[]>): 
   Promise<void> => {
   try {
     const { boardId, id } = req.params

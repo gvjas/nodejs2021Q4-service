@@ -3,16 +3,16 @@ import { FastifyReply } from 'fastify'
 import { boardsRepo } from './board.memory.repository';
 import Board from './board.model';
 import * as tasksRepo from '../tasks/task.memory.repository';
-import handlers, { CustomRequest} from '../handlers';
+import handlers, { CustomRequest, Obj } from '../handlers';
 
 const getAll = (): Promise<(Board|undefined)[]> => boardsRepo.getAll();
 
-const getById = (id?: string): Promise<Board|undefined> => boardsRepo.getById(id);
+const getById = (id: string): Promise<Board|undefined> => boardsRepo.getById(id);
 
-const pushDB = (board: {[key: string]: (string | number | null | undefined | object)}): 
+const pushDB = (board: Obj): 
   Promise<Board> => boardsRepo.pushDB(new Board({ ...board }));
 
-const update = (board: {[key: string]: (string | number | null | undefined | object)}): 
+const update = (board: Obj): 
   Promise<Board|void> => boardsRepo.update(new Board({ ...board }));
 
 const del = (id: string): Promise<void> => boardsRepo.del(id);

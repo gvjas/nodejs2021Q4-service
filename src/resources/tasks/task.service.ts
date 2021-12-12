@@ -2,20 +2,20 @@ import { FastifyReply } from 'fastify'
 
 import { getById as getByBoardId } from '../boards/board.service';
 import tasksRepo from './task.memory.repository';
-import handlers, { CustomRequest} from '../handlers';
+import handlers, { CustomRequest, Obj } from '../handlers';
 import Task from './task.model';
 
-const getAllByBoardId = (boardId?: string|undefined): Promise<(Task|undefined)[]> => tasksRepo.getAllByBoardId(boardId);
+const getAllByBoardId = (boardId?: string): Promise<(Task|undefined)[]> => tasksRepo.getAllByBoardId(boardId);
 
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
 const delAll = (boardId: string): void => tasksRepo.delAll(boardId);
 
-const getById = (id?: string): Promise<Task|undefined> => tasksRepo.getById(id);
+const getById = (id: string): Promise<Task|undefined> => tasksRepo.getById(id);
 
-const pushDB = (task: {[key: string]: (string | number | null | undefined | object)}): Promise<Task> => 
+const pushDB = (task: Obj): Promise<Task> => 
   tasksRepo.pushDB(new Task({ ...task }));
 
-const update = (task: {[key: string]: (string | number | null | undefined | object)}): Promise<Task|void> => 
+const update = (task: Obj): Promise<Task|void> => 
                 tasksRepo.update(new Task({ ...task }));
 
 const del = (id?: string): Promise<void> => tasksRepo.del(id);
