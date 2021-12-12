@@ -136,7 +136,7 @@ const handlerDelete = async (req, res, getById, del, callback) => {
  * in the database for the board's tasks and server response
  * @param req fastify request
  * @param res fastify reply
- * @callback getByBoardId for handlerId get board's id
+ * @callback getByBoardId for handlerId get id for type generic U
  * @callback getAll get all elements from the base and type for generic T
  * @returns promise void ("bad request" or "error" server response)
  */

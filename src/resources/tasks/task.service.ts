@@ -1,14 +1,13 @@
 import { FastifyReply } from 'fastify'
 
 import { getById as getByBoardId } from '../boards/board.service';
-import tasksRepo from './task.memory.repository';
+import tasksRepo, { delAll as delAllTask, setUserNull as setDelUserNull } from './task.memory.repository';
 import handlers, { CustomRequest, Obj } from '../handlers';
 import Task from './task.model';
 
 const getAllByBoardId = (boardId?: string): Promise<(Task|undefined)[]> => tasksRepo.getAllByBoardId(boardId);
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
-const delAll = (boardId: string): void => tasksRepo.delAll(boardId);
+const delAll = (boardId: string): Promise<void> => delAllTask(boardId);
 
 const getById = (id: string): Promise<Task|void> => tasksRepo.getById(id);
 
@@ -20,8 +19,7 @@ const update = (task: Obj): Promise<Task|void> =>
 
 const del = (id?: string): Promise<void> => tasksRepo.del(id);
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'setUserNull' does not exist on type 'Rep... Remove this comment to see the full error message
-const setUserNull = (userId: string): void => tasksRepo.setUserNull(userId);
+const setUserNull = (userId: string): Promise<void> => setDelUserNull(userId);
 
 const handlerGetAll = (req: CustomRequest, res: FastifyReply): Promise<void> => 
   handlers.handlerGetAll(req, res, getAllByBoardId)

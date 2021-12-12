@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Class for creating a in-memory data base
- * @param T - a generic that flows through to the type in the data base
+ * class :: Repository
+ * @typeParam T - a generic that flows through to the type in the data base
  */
 class Repository {
     /**

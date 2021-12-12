@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 class User {
+
   id: string;
 
   login: string;

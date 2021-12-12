@@ -1,5 +1,5 @@
 /**
- * @type {IidWise} an interface for extends generic T
+ * type IidWise an interface for extends generic T
  * @param id - element's id
  * @param boardId - board's id  
  */
@@ -10,19 +10,19 @@ export type IidWise = {
 
 /**
  * Class for creating a in-memory data base
- * @param T - a generic that flows through to the type in the data base
+ * class :: Repository
+ * @typeParam T - a generic that flows through to the type in the data base
  */
 class Repository<T extends IidWise> {
   db: (T|undefined)[];
 
   /**
    * Create an empty array for the base
-   * @constructor
    */
   constructor() {
     this.db = []
   }
-
+  
   /**
    * Get an array of elements from the base
    * @returns promise repository's array by db
@@ -33,7 +33,7 @@ class Repository<T extends IidWise> {
 
   /**
    * Get an array of elements by board's id from the database
-   * @param {string} [boardId] id by board
+   * @param boardId - id by board
    * @returns promise base array from items by board's id or []
    */
   async getAllByBoardId(boardId?: string): Promise<(T|undefined)[]> {
@@ -42,7 +42,7 @@ class Repository<T extends IidWise> {
 
   /**
    * Get a base element by id
-   * @param id element's id 
+   * @param id - element's id 
    * @returns promise one base element by id or void
    */
   async getById(id: string): Promise<T|void> {
@@ -51,7 +51,7 @@ class Repository<T extends IidWise> {
 
   /**
    * Add item to database
-   * @param item new element
+   * @param item - new element
    * @returns promise created element or void
    */
   async pushDB(item: T): Promise<T> {
@@ -61,7 +61,7 @@ class Repository<T extends IidWise> {
 
   /**
    * Update the element in the database
-   * @param updateItem element with new properties 
+   * @param updateItem - element with new properties 
    * @returns promise updated element or void
    */
   async update(updateItem: T): Promise<T|void> {
@@ -74,7 +74,7 @@ class Repository<T extends IidWise> {
 
   /**
    * Delete the element in the database
-   * @param id element's id 
+   * @param id - element's id 
    * @returns promise void
    */
   async del(id?: string): Promise<void> {

@@ -18,9 +18,9 @@ type ResponseMessage = {[key: string]: string}
 
 /**
  * Handler for server response
- * @param res fastify reply
- * @param code numeric server response
- * @param message object for the response code
+ * @param res - fastify reply
+ * @param code - numeric server response
+ * @param message - object for the response code
  * @returns type void
  */
 const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | ResponseMessage): void => {
@@ -31,9 +31,9 @@ const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | R
 
 /**
  * Treatment and check id for other handlers and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get an item by id and type for T generic
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getById - callback get an item by id and type for T generic
  * @returns promise element type T or void ("bad request" server response)
  */
 const handlerId = async <T>(req: CustomRequest, res: FastifyReply, 
@@ -51,9 +51,9 @@ const handlerId = async <T>(req: CustomRequest, res: FastifyReply,
     
 /**
  * GET treatment of all elements from the base and server response
- * @param req server fastify request
- * @param res server fastify reply
- * @callback getAll get all elements from the base and type for generic T
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply, 
@@ -70,9 +70,9 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
 
 /**
  * GET treatment of one element by number from the database
- * @param req fastify request
- * @param res fastify reply
- * @callback getById for get id handler 
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getById - callback for get id handler 
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply, 
@@ -90,10 +90,10 @@ const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply,
 
 /**
  * POST handler for creating a new element in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback pushDB append new item in the data base
- * @callback toResponse displays all or some properties of the element
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param pushDB - callback append new item in the data base
+ * @param toResponse - callback displays all or some properties of the element
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerPost = async <T>(req: CustomRequest, res: FastifyReply, 
@@ -113,11 +113,11 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
 
 /**
  * PUT handler to update the item in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get id for handlerId
- * @callback update updates the properties of the item in the database
- * @callback toResponse displays all or some properties of the element
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getById - callback get id for handlerId
+ * @param update - callback updates the properties of the item in the database
+ * @param toResponse - callback displays all or some properties of the element
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyReply, 
@@ -140,11 +140,11 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
 
 /**
  * DELETE element removal handler in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get id for handlerId
- * @callback del deleting an item in the database
- * @callback callback updates the properties associated with other elements in the database 
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getById - callback get id for handlerId
+ * @param del - callback deleting an item in the database
+ * @param callback - callback updates the properties associated with other elements in the database 
  *                    (e.g. sets the id as zero or del board's tasks)
  * @returns promise void ("OK" or "error" server response)
  */
@@ -170,10 +170,10 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
 /**
  * For hook for all methods - checking board's id and tasks's id 
  * in the database for the board's tasks and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getByBoardId for handlerId get id for type generic U 
- * @callback getAll get all elements from the base and type for generic T
+ * @param req - fastify request
+ * @param res - fastify reply
+ * @param getByBoardId - callback for handlerId get id for type generic U 
+ * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("bad request" or "error" server response)
  */
 const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: FastifyReply, 

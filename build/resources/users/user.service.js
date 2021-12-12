@@ -8,6 +8,7 @@ const user_model_1 = __importDefault(require("./user.model"));
 const user_memory_repository_1 = require("./user.memory.repository");
 const handlers_1 = __importDefault(require("../handlers"));
 const task_service_1 = require("../tasks/task.service");
+/** {@inheritDoc Repository.getAll} */
 const getAll = () => user_memory_repository_1.usersRepo.getAll();
 const getById = (id) => user_memory_repository_1.usersRepo.getById(id);
 const pushDB = (user) => user_memory_repository_1.usersRepo.pushDB(new user_model_1.default({ ...user }));

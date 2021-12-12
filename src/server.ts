@@ -6,7 +6,6 @@ const PORT = configConst.PORT || 4000
 
 /**
  * Start server of fastify
- * @param not params
  * @returns type Promise<void>
  */
 const startServer = async (): Promise<void> => {

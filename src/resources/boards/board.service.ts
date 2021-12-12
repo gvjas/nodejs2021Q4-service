@@ -2,7 +2,7 @@ import { FastifyReply } from 'fastify'
 
 import { boardsRepo } from './board.memory.repository';
 import Board from './board.model';
-import * as tasksRepo from '../tasks/task.memory.repository';
+import {delAll } from '../tasks/task.memory.repository';
 import handlers, { CustomRequest, Obj } from '../handlers';
 
 const getAll = (): Promise<(Board|undefined)[]> => boardsRepo.getAll();
@@ -30,8 +30,7 @@ const handlerPut = (req: CustomRequest, res: FastifyReply): Promise<void> =>
     handlers.handlerPut(req, res, getById, update, Board.toResponse)
 
 const handlerDelete = (req: CustomRequest, res: FastifyReply): Promise<void> => 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
-    handlers.handlerDelete(req, res, getById, del, tasksRepo.delAll)
+    handlers.handlerDelete(req, res, getById, del, delAll)
 
 const postItem = {
     schema: {

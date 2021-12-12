@@ -5,8 +5,8 @@ import { usersRepo } from './user.memory.repository';
 import handlers, { CustomRequest, Obj } from '../handlers';
 import { setUserNull } from '../tasks/task.service';
 
-
-const getAll = (): Promise<(User|void)[]> => usersRepo.getAll();
+/** {@inheritDoc usersRepo.getAll} */
+const getAll = (): Promise<(User|undefined)[]> => usersRepo.getAll();
 
 const getById = (id: string): Promise<User|void> => usersRepo.getById(id);
 
