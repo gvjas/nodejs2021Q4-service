@@ -16,12 +16,26 @@ export type CustomRequest = FastifyRequest<{
 
 type ResponseMessage = {[key: string]: string}
 
+/**
+ * Handler for server response
+ * @param res fastify reply
+ * @param code numeric server response
+ * @param message object for the response code
+ * @returns type void
+ */
 const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | ResponseMessage): void => {
   res.status(code)
       .header('Content-Type', DEFAULT_HEADERS.TYPE_JSON)
       .send(JSON.stringify(message))    
 }
 
+/**
+ * Treatment and check id for other handlers and server response
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback getById get an item by id and type for T generic
+ * @returns promise element type T or void ("bad request" server response)
+ */
 const handlerId = async <T>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => T|void, id: string): 
   Promise<T|void> => {
@@ -32,9 +46,16 @@ const handlerId = async <T>(req: CustomRequest, res: FastifyReply,
     }
     return await getById(id) || responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
         HTTP_RESPOSE_MESSAGES.NOT_FOUND)
-    
 }
 
+    
+/**
+ * GET treatment of all elements from the base and server response
+ * @param req server fastify request
+ * @param res server fastify reply
+ * @callback getAll get all elements from the base and type for generic T
+ * @returns promise void ("OK" or "error" server response)
+ */
 const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply, 
   getAll: (boardId?: string) => Promise<(T|undefined)[]>): Promise<void> => {
   try {
@@ -47,6 +68,13 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
   }
 }
 
+/**
+ * GET treatment of one element by number from the database
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback getById for get id handler 
+ * @returns promise void ("OK" or "error" server response)
+ */
 const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => T): 
   Promise<void> => {
@@ -60,6 +88,14 @@ const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply,
   }
 }
 
+/**
+ * POST handler for creating a new element in the database and server response
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback pushDB append new item in the data base
+ * @callback toResponse displays all or some properties of the element
+ * @returns promise void ("OK" or "error" server response)
+ */
 const handlerPost = async <T>(req: CustomRequest, res: FastifyReply, 
   pushDB: (body:Obj) => Promise<T>, 
   toResponse: (post: T) => (T | ResponseMessage)): 
@@ -75,6 +111,15 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
   }
 }
 
+/**
+ * PUT handler to update the item in the database and server response
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback getById get id for handlerId
+ * @callback update updates the properties of the item in the database
+ * @callback toResponse displays all or some properties of the element
+ * @returns promise void ("OK" or "error" server response)
+ */
 const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => Promise<T|void>, 
   update: (body: Obj) => Promise<T|void>, 
@@ -93,6 +138,16 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
   }
 }
 
+/**
+ * DELETE element removal handler in the database and server response
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback getById get id for handlerId
+ * @callback del deleting an item in the database
+ * @callback callback updates the properties associated with other elements in the database 
+ *                    (e.g. sets the id as zero or del board's tasks)
+ * @returns promise void ("OK" or "error" server response)
+ */
 const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => Promise<T|void>, 
   del: (id: string) => Promise<void>, 
@@ -112,15 +167,24 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
   }
 }
 
+/**
+ * For hook for all methods - checking board's id and tasks's id 
+ * in the database for the board's tasks and server response
+ * @param req fastify request
+ * @param res fastify reply
+ * @callback getByBoardId for handlerId get id for type generic U 
+ * @callback getAll get all elements from the base and type for generic T
+ * @returns promise void ("bad request" or "error" server response)
+ */
 const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: FastifyReply, 
-  getByBoardId: (boardId: string) => U|void, 
+  getByBoardId: (boardId: string) => Promise<(U|void)>, 
   getAll: (boardId: string) => Promise<(T|undefined)[]>): 
   Promise<void> => {
   try {
     const { boardId, id } = req.params
     await handlerId(req, res, getByBoardId, boardId)
-    const tasks = await getAll(boardId)
-    const task = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
+    const tasks: (T|undefined)[] = await getAll(boardId)
+    const task: (T|undefined) = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
     if (id && !task) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
         HTTP_RESPOSE_MESSAGES.NOT_FOUND)

@@ -10,7 +10,7 @@ const getAllByBoardId = (boardId?: string): Promise<(Task|undefined)[]> => tasks
 // @ts-expect-error ts-migrate(2339) FIXME: Property 'delAll' does not exist on type 'Reposito... Remove this comment to see the full error message
 const delAll = (boardId: string): void => tasksRepo.delAll(boardId);
 
-const getById = (id: string): Promise<Task|undefined> => tasksRepo.getById(id);
+const getById = (id: string): Promise<Task|void> => tasksRepo.getById(id);
 
 const pushDB = (task: Obj): Promise<Task> => 
   tasksRepo.pushDB(new Task({ ...task }));

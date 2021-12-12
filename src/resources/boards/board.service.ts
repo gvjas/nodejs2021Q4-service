@@ -7,7 +7,7 @@ import handlers, { CustomRequest, Obj } from '../handlers';
 
 const getAll = (): Promise<(Board|undefined)[]> => boardsRepo.getAll();
 
-const getById = (id: string): Promise<Board|undefined> => boardsRepo.getById(id);
+const getById = (id: string): Promise<Board|void> => boardsRepo.getById(id);
 
 const pushDB = (board: Obj): 
   Promise<Board> => boardsRepo.pushDB(new Board({ ...board }));
