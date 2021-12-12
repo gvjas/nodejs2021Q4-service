@@ -6,9 +6,9 @@
     "url": ""
   },
   "description": "REST service starter for RS School",
-  "main": "src/build/server.js",
+  "main": "./build/server.js",
   "scripts": {
-    "build": "tsc -p src/tsconfig.json",
+    "build": "tsc -p ./tsconfig.json",
     "dev": "nodemon",
     "start": "ts-node src/server.ts",
     "lint": "eslint --ext .js,.ts --fix src/",
@@ -68,6 +68,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^4.3.8",
     "jest": "27.3.1",
     "lint-staged": "12.0.3",
@@ -76,6 +77,7 @@
     "supertest": "6.1.6",
     "ts-migrate": "^0.1.26",
     "ts-node": "^10.4.0",
+    "typedoc": "^0.22.10",
     "typescript": "^4.5.2"
   }
 }
