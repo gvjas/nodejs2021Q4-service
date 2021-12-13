@@ -3,22 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
 const constants_1 = require("./constants");
 /**
+ * @remarks
  * Handler for server response
- * @param res fastify reply
- * @param code numeric server response
- * @param message object for the response code
+ * @typeParam T - response body
+ * @param res - the fastify reply object
+ * @param code - numeric server response
+ * @param message - object for the response code
  * @returns type void
  */
-const responseCodeMesssage = (res, code, message) => {
+const responseCodeMesssage = async (res, code, message) => {
     res.status(code)
         .header('Content-Type', constants_1.DEFAULT_HEADERS.TYPE_JSON)
         .send(JSON.stringify(message));
 };
 /**
+ * @remarks
  * Treatment and check id for other handlers and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get an item by id and type for T generic
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getById - callback get an item by id and type for T generic
  * @returns promise element type T or void ("bad request" server response)
  */
 const handlerId = async (req, res, getById, id) => {
@@ -28,10 +32,12 @@ const handlerId = async (req, res, getById, id) => {
     return await getById(id) || responseCodeMesssage(res, constants_1.HTTP_STATUS_CODES.NOT_FOUND, constants_1.HTTP_RESPOSE_MESSAGES.NOT_FOUND);
 };
 /**
+ * @remarks
  * GET treatment of all elements from the base and server response
- * @param req server fastify request
- * @param res server fastify reply
- * @callback getAll get all elements from the base and type for generic T
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerGetAll = async (req, res, getAll) => {
@@ -45,10 +51,12 @@ const handlerGetAll = async (req, res, getAll) => {
     }
 };
 /**
+ * @remarks
  * GET treatment of one element by number from the database
- * @param req fastify request
- * @param res fastify reply
- * @callback getById for get id handler
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getById - callback for get id handler
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerGetItem = async (req, res, getById) => {
@@ -62,11 +70,13 @@ const handlerGetItem = async (req, res, getById) => {
     }
 };
 /**
+ * @remarks
  * POST handler for creating a new element in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback pushDB append new item in the data base
- * @callback toResponse displays all or some properties of the element
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param pushDB - callback append new item in the data base
+ * @param toResponse - callback displays all or some properties of the element
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerPost = async (req, res, pushDB, toResponse) => {
@@ -83,12 +93,14 @@ const handlerPost = async (req, res, pushDB, toResponse) => {
     }
 };
 /**
+ * @remarks
  * PUT handler to update the item in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get id for handlerId
- * @callback update updates the properties of the item in the database
- * @callback toResponse displays all or some properties of the element
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getById - callback get id for handlerId
+ * @param update - callback updates the properties of the item in the database
+ * @param toResponse - callback displays all or some properties of the element
  * @returns promise void ("OK" or "error" server response)
  */
 const handlerPut = async (req, res, getById, update, toResponse) => {
@@ -107,12 +119,14 @@ const handlerPut = async (req, res, getById, update, toResponse) => {
     }
 };
 /**
+ * @remarks
  * DELETE element removal handler in the database and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getById get id for handlerId
- * @callback del deleting an item in the database
- * @callback callback updates the properties associated with other elements in the database
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getById - callback get id for handlerId
+ * @param del - callback deleting an item in the database
+ * @param callback - callback updates the properties associated with other elements in the database
  *                    (e.g. sets the id as zero or del board's tasks)
  * @returns promise void ("OK" or "error" server response)
  */
@@ -132,12 +146,15 @@ const handlerDelete = async (req, res, getById, del, callback) => {
     }
 };
 /**
+ * @remarks
  * For hook for all methods - checking board's id and tasks's id
  * in the database for the board's tasks and server response
- * @param req fastify request
- * @param res fastify reply
- * @callback getByBoardId for handlerId get id for type generic U
- * @callback getAll get all elements from the base and type for generic T
+ * @typeParam T - response body
+ * @typeParam U - related intermediate parameter
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
+ * @param getByBoardId - callback for handlerId get id for type generic U
+ * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("bad request" or "error" server response)
  */
 const handlerValidId = async (req, res, getByBoardId, getAll) => {

@@ -17,22 +17,26 @@ export type CustomRequest = FastifyRequest<{
 type ResponseMessage = {[key: string]: string}
 
 /**
+ * @remarks
  * Handler for server response
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param res - the fastify reply object
  * @param code - numeric server response
  * @param message - object for the response code
  * @returns type void
  */
-const responseCodeMesssage = <T>(res: FastifyReply, code: number, message: T | ResponseMessage): void => {
+const responseCodeMesssage = async <T>(res: FastifyReply, code: number, message: T | ResponseMessage): Promise<void> => {
   res.status(code)
       .header('Content-Type', DEFAULT_HEADERS.TYPE_JSON)
       .send(JSON.stringify(message))    
 }
 
 /**
+ * @remarks
  * Treatment and check id for other handlers and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getById - callback get an item by id and type for T generic
  * @returns promise element type T or void ("bad request" server response)
  */
@@ -50,9 +54,11 @@ const handlerId = async <T>(req: CustomRequest, res: FastifyReply,
 
     
 /**
+ * @remarks
  * GET treatment of all elements from the base and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("OK" or "error" server response)
  */
@@ -69,9 +75,11 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 /**
+ * @remarks
  * GET treatment of one element by number from the database
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getById - callback for get id handler 
  * @returns promise void ("OK" or "error" server response)
  */
@@ -89,9 +97,11 @@ const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 /**
+ * @remarks
  * POST handler for creating a new element in the database and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param pushDB - callback append new item in the data base
  * @param toResponse - callback displays all or some properties of the element
  * @returns promise void ("OK" or "error" server response)
@@ -112,9 +122,11 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 /**
+ * @remarks
  * PUT handler to update the item in the database and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getById - callback get id for handlerId
  * @param update - callback updates the properties of the item in the database
  * @param toResponse - callback displays all or some properties of the element
@@ -139,9 +151,11 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
 }
 
 /**
+ * @remarks
  * DELETE element removal handler in the database and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getById - callback get id for handlerId
  * @param del - callback deleting an item in the database
  * @param callback - callback updates the properties associated with other elements in the database 
@@ -168,10 +182,13 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
 }
 
 /**
+ * @remarks
  * For hook for all methods - checking board's id and tasks's id 
  * in the database for the board's tasks and server response
- * @param req - fastify request
- * @param res - fastify reply
+ * @typeParam T - response body
+ * @typeParam U - related intermediate parameter
+ * @param req - the fastify request object
+ * @param res - the fastify reply object
  * @param getByBoardId - callback for handlerId get id for type generic U 
  * @param getAll - callback get all elements from the base and type for generic T
  * @returns promise void ("bad request" or "error" server response)

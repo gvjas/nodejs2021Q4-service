@@ -5,5 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.boardsRepo = void 0;
 const Repository_1 = __importDefault(require("../Repository"));
+/**
+ * @remarks
+ * database with CRUD methods for the Board
+ */
 const boardsRepo = new Repository_1.default();
 exports.boardsRepo = boardsRepo;

@@ -1,4 +1,5 @@
 /**
+ * @remarks
  * type IidWise an interface for extends generic T
  * @param id - element's id
  * @param boardId - board's id  
@@ -9,21 +10,24 @@ export type IidWise = {
 }
 
 /**
- * Class for creating a in-memory data base
  * class :: Repository
- * @typeParam T - a generic that flows through to the type in the data base
+ * @remarks
+ * in-memory database and CRUD methods
+ * @typeParam T - a generic type of objects the database contains 
  */
 class Repository<T extends IidWise> {
   db: (T|undefined)[];
 
   /**
-   * Create an empty array for the base
+   * @remarks
+   * Create and inicializing empty array for the new base
    */
   constructor() {
     this.db = []
   }
   
   /**
+   * @remarks
    * Get an array of elements from the base
    * @returns promise repository's array by db
    */
@@ -32,8 +36,9 @@ class Repository<T extends IidWise> {
   }
 
   /**
+   * @remarks
    * Get an array of elements by board's id from the database
-   * @param boardId - id by board
+   * @param boardId - board's id
    * @returns promise base array from items by board's id or []
    */
   async getAllByBoardId(boardId?: string): Promise<(T|undefined)[]> {
@@ -41,6 +46,7 @@ class Repository<T extends IidWise> {
   }
 
   /**
+   * @remarks
    * Get a base element by id
    * @param id - element's id 
    * @returns promise one base element by id or void
@@ -50,6 +56,7 @@ class Repository<T extends IidWise> {
   }
 
   /**
+   * @remarks
    * Add item to database
    * @param item - new element
    * @returns promise created element or void
@@ -60,6 +67,7 @@ class Repository<T extends IidWise> {
   }
 
   /**
+   * @remarks
    * Update the element in the database
    * @param updateItem - element with new properties 
    * @returns promise updated element or void
@@ -73,6 +81,7 @@ class Repository<T extends IidWise> {
   }
 
   /**
+   * @remarks
    * Delete the element in the database
    * @param id - element's id 
    * @returns promise void
