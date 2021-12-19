@@ -7,6 +7,7 @@ import { IidWise } from './Repository';
 import Column from './columns/column.model';
 
 
+/** template for the request's body */
 export type Obj = {[key: string]: (string | number | null | (Column|undefined)[])}
 
 export type CustomRequest = FastifyRequest<{
