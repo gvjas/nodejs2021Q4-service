@@ -90,6 +90,9 @@ const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply,
   try {
     const { id } : { id: string} = req.params
     const item: T|void = await handlerId(req, res, getById, id)
+    if (!item) {
+      return
+    }
     res.send(item)
   } catch (e) {
     responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
@@ -200,7 +203,10 @@ const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: Fas
   Promise<void> => {
   try {
     const { boardId, id } = req.params
-    await handlerId(req, res, getByBoardId, boardId)
+    const board: U|void = await handlerId(req, res, getByBoardId, boardId)
+    if (!board) {
+      return
+    }
     const tasks: (T|undefined)[] = await getAll(boardId)
     const task: (T|undefined) = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
     if (id && !task) {

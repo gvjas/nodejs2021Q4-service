@@ -51,7 +51,7 @@ const handlerPost = (req: CustomRequest, res: FastifyReply): Promise<void> =>
     handlers.handlerPost(req, res, pushDB, Board.toResponse)
 
 /**
- *  {@inheritDoc handlers.handlerPut 
+ *  {@inheritDoc handlers.handlerPut}
  */
 const handlerPut = (req: CustomRequest, res: FastifyReply): Promise<void> => 
     handlers.handlerPut(req, res, getById, update, Board.toResponse)

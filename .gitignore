@@ -3,4 +3,5 @@ test
 .github
 .gitignore
 test.http
-./build
+build
+access.log
