@@ -65,14 +65,14 @@ const handlerId = async <T>(req: CustomRequest, res: FastifyReply,
  */
 const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply, 
   getAll: (boardId?: string) => Promise<(T|undefined)[]>): Promise<void> => {
-  try {
+  // try {
     const { boardId } : { boardId?: string } = req.params
     const items: (T|undefined)[] = await getAll(boardId)
     res.send(items)
-  } catch (e) {
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-    HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
+  // } catch (e) {
+  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+  //   HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
+  // }
 }
 
 /**
@@ -87,17 +87,17 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
 const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => T): 
   Promise<void> => {
-  try {
+  // try {
     const { id } : { id: string} = req.params
     const item: T|void = await handlerId(req, res, getById, id)
     if (!item) {
       return
     }
     res.send(item)
-  } catch (e) {
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
+  // } catch (e) {
+  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
+  // }
 }
 
 /**
@@ -114,15 +114,15 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
   pushDB: (body:Obj) => Promise<T>, 
   toResponse: (post: T) => (T | ResponseMessage)): 
   Promise<void> => {
-  try {
+  // try {
     const { boardId } : { boardId?: string} = req.params
     if (boardId) { req.body.boardId = boardId }
     const post: T = await pushDB({...req.body})
     responseCodeMesssage(res, HTTP_STATUS_CODES.CREATED, toResponse(post));
-  } catch (e) {
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
+  // } catch (e) {
+  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
+  // }
 }
 
 /**
@@ -140,7 +140,7 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
   getById: (id: string) => Promise<T|void>, 
   update: (body: Obj) => Promise<T|void>, 
   toResponse: (updateItem: T) => (T | ResponseMessage)): Promise<void> => {
-  try {
+  // try {
     const { id } : { id: string} = req.params
     await handlerId(req, res, getById, id)
     const updateItem: (T|void) = await update(req.body)
@@ -148,10 +148,10 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
       updateItem.id = id; 
       responseCodeMesssage(res, HTTP_STATUS_CODES.OK, toResponse(updateItem)) 
     };
-  } catch (e) {
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
+  // } catch (e) {
+  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
+  // }
 }
 
 /**
@@ -170,7 +170,7 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
   getById: (id: string) => Promise<T|void>, 
   del: (id: string) => Promise<void>, 
   callback?: (boardId: string) => void): Promise<void> => {
-  try {
+  // try {
     const { id } = req.params
     await handlerId(req, res, getById, id)
     if (id && callback) {
@@ -179,10 +179,10 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
     await del(id)
     res.status(HTTP_STATUS_CODES.DELETED)
     res.send()
-  } catch (e) {
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
+  // } catch (e) {
+  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
+  // }
 }
 
 /**
@@ -204,9 +204,10 @@ const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: Fas
   try {
     const { boardId, id } = req.params
     const board: U|void = await handlerId(req, res, getByBoardId, boardId)
-    if (!board) {
-      return
-    }
+    // if (!board) {
+    //   return
+    // }
+    throw new Error("333333333333333333333333333333333333")
     const tasks: (T|undefined)[] = await getAll(boardId)
     const task: (T|undefined) = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
     if (id && !task) {

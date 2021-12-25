@@ -4,4 +4,4 @@ test
 .gitignore
 test.http
 build
-access.log
+logs

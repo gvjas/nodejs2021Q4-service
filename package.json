@@ -50,6 +50,7 @@
     "fastify": "^3.24.1",
     "fastify-api-logger": "^1.0.10",
     "fastify-swagger": "^4.12.6",
+    "pino": "^7.6.1",
     "uuid": "8.3.2",
     "yamljs": "0.3.0"
   },
@@ -57,6 +58,7 @@
     "@microsoft/tsdoc": "^0.13.2",
     "@tsconfig/node16": "^1.0.2",
     "@types/node": "^16.11.12",
+    "@types/pino": "^7.0.5",
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
