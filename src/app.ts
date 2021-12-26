@@ -12,14 +12,27 @@ import { loggerPino, handlerLogBody, handlerApiLog } from './logger';
 /**
  * @remarks
  * server's instance 
- * @param opts  - logger - is logging server's events?
+ * @param opts  - logger - loggerPino logging server's events
  */
 const fastify: FastifyInstance = fastifyFactory({logger: loggerPino})
 
+/**
+ * @remarks
+ * logger's hook - logging body
+ */
 fastify.addHook('preHandler', handlerLogBody)
 
+/**
+ * @remarks
+ * set loging server's errors
+ */
 fastify.setErrorHandler(errorHandler)
 
+/**
+ * @remarks
+ * API hook fastify logger 
+ * (e.g. API levels for the handled errors == fastify levels for the unhandled errors)
+ */
 fastify.addHook('onResponse', handlerApiLog)
 
 /**
@@ -52,7 +65,4 @@ const swaggerOpts: SwaggerOptions = {
 fastify.register(swagger, swaggerOpts);
 
 export default fastify;
-function handlerApiLo(arg0: string, handlerApiLo: any) {
-  throw new Error('Function not implemented.');
-}
 
