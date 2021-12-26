@@ -1,14 +1,13 @@
-import fastifyFactory, { FastifyInstance, FastifyLoggerInstance, FastifyLoggerOptions, FastifyRequest } from 'fastify';
+import fastifyFactory, { FastifyInstance } from 'fastify';
 import path from 'path';
 import swagger, { SwaggerOptions } from 'fastify-swagger'
 
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
-
 import { errorHandler } from './errorHandler';
+import { loggerPino, handlerLogBody, handlerApiLog } from './logger';
 
-import { loggerPino} from './logHandler';
 
 /**
  * @remarks
@@ -17,34 +16,11 @@ import { loggerPino} from './logHandler';
  */
 const fastify: FastifyInstance = fastifyFactory({logger: loggerPino})
 
+fastify.addHook('preHandler', handlerLogBody)
+
 fastify.setErrorHandler(errorHandler)
 
-
-// fastify.addHook('onRequest', handlerValidId)
-  // /
-// fastify.register({
-//     logger: {
-//       level: 'info',
-//       serializers: {
-//         function (req): {
-//           return {
-//             method: req.method,
-//             url: req.url,
-//             params: req.params,
-//             headers: req.headers,
-//             hostname: req.hostname,
-//             remoteAddress: req.ip,
-//             remotePort: req.socket.remotePort
-//         }
-//       }
-//     }
-//   })
-// fastify.register(require('fastify-api-logger'), {
-//   user: 'userId',
-//   level: 'debug',
-//   prettyPrint: true, // You may want to turn off prettyPrint in production
-//   sensitiveUrls: [], // Ignore sensitive URLs
-// })
+fastify.addHook('onResponse', handlerApiLog)
 
 /**
  * @remarks
@@ -76,3 +52,7 @@ const swaggerOpts: SwaggerOptions = {
 fastify.register(swagger, swaggerOpts);
 
 export default fastify;
+function handlerApiLo(arg0: string, handlerApiLo: any) {
+  throw new Error('Function not implemented.');
+}
+

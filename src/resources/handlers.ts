@@ -5,6 +5,7 @@ import { validate as isUuid } from 'uuid';
 import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES, DEFAULT_HEADERS } from './constants';
 import { IidWise } from './Repository';
 import Column from './columns/column.model';
+import { responseCodeMesssage, ResponseMessage } from '../errorHandler';
 
 
 /** template for the request's body */
@@ -14,23 +15,6 @@ export type CustomRequest = FastifyRequest<{
   Body: Obj
   Params: { id: string; boardId: string }
 }> 
-
-type ResponseMessage = {[key: string]: string}
-
-/**
- * @remarks
- * Handler for server response
- * @typeParam T - response body
- * @param res - the fastify reply object
- * @param code - numeric server response
- * @param message - object for the response code
- * @returns type void
- */
-const responseCodeMesssage = async <T>(res: FastifyReply, code: number, message: T | ResponseMessage): Promise<void> => {
-  res.status(code)
-      .header('Content-Type', DEFAULT_HEADERS.TYPE_JSON)
-      .send(JSON.stringify(message))    
-}
 
 /**
  * @remarks
@@ -65,14 +49,9 @@ const handlerId = async <T>(req: CustomRequest, res: FastifyReply,
  */
 const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply, 
   getAll: (boardId?: string) => Promise<(T|undefined)[]>): Promise<void> => {
-  // try {
     const { boardId } : { boardId?: string } = req.params
     const items: (T|undefined)[] = await getAll(boardId)
     res.send(items)
-  // } catch (e) {
-  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-  //   HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  // }
 }
 
 /**
@@ -87,17 +66,12 @@ const handlerGetAll = async <T>(req: CustomRequest, res: FastifyReply,
 const handlerGetItem = async <T>(req: CustomRequest, res: FastifyReply, 
   getById: (id: string) => T): 
   Promise<void> => {
-  // try {
     const { id } : { id: string} = req.params
     const item: T|void = await handlerId(req, res, getById, id)
     if (!item) {
       return
     }
     res.send(item)
-  // } catch (e) {
-  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  // }
 }
 
 /**
@@ -114,15 +88,10 @@ const handlerPost = async <T>(req: CustomRequest, res: FastifyReply,
   pushDB: (body:Obj) => Promise<T>, 
   toResponse: (post: T) => (T | ResponseMessage)): 
   Promise<void> => {
-  // try {
     const { boardId } : { boardId?: string} = req.params
     if (boardId) { req.body.boardId = boardId }
     const post: T = await pushDB({...req.body})
     responseCodeMesssage(res, HTTP_STATUS_CODES.CREATED, toResponse(post));
-  // } catch (e) {
-  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  // }
 }
 
 /**
@@ -140,7 +109,6 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
   getById: (id: string) => Promise<T|void>, 
   update: (body: Obj) => Promise<T|void>, 
   toResponse: (updateItem: T) => (T | ResponseMessage)): Promise<void> => {
-  // try {
     const { id } : { id: string} = req.params
     await handlerId(req, res, getById, id)
     const updateItem: (T|void) = await update(req.body)
@@ -148,10 +116,6 @@ const handlerPut = async <T extends IidWise>(req: CustomRequest, res: FastifyRep
       updateItem.id = id; 
       responseCodeMesssage(res, HTTP_STATUS_CODES.OK, toResponse(updateItem)) 
     };
-  // } catch (e) {
-  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  // }
 }
 
 /**
@@ -170,7 +134,6 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
   getById: (id: string) => Promise<T|void>, 
   del: (id: string) => Promise<void>, 
   callback?: (boardId: string) => void): Promise<void> => {
-  // try {
     const { id } = req.params
     await handlerId(req, res, getById, id)
     if (id && callback) {
@@ -179,10 +142,6 @@ const handlerDelete = async <T>(req: CustomRequest, res: FastifyReply,
     await del(id)
     res.status(HTTP_STATUS_CODES.DELETED)
     res.send()
-  // } catch (e) {
-  //   responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-  //     HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  // }
 }
 
 /**
@@ -201,23 +160,17 @@ const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: Fas
   getByBoardId: (boardId: string) => Promise<(U|void)>, 
   getAll: (boardId: string) => Promise<(T|undefined)[]>): 
   Promise<void> => {
-  try {
     const { boardId, id } = req.params
     const board: U|void = await handlerId(req, res, getByBoardId, boardId)
-    // if (!board) {
-    //   return
-    // }
-    throw new Error("333333333333333333333333333333333333")
+    if (!board) {
+      return
+    }
     const tasks: (T|undefined)[] = await getAll(boardId)
     const task: (T|undefined) = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
     if (id && !task) {
       responseCodeMesssage(res, HTTP_STATUS_CODES.NOT_FOUND,
         HTTP_RESPOSE_MESSAGES.NOT_FOUND)
     }
-  } catch (e) { 
-    responseCodeMesssage(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
 }
 
 export default { handlerGetAll, handlerGetItem, handlerPost, handlerPut, handlerDelete, handlerValidId }; 

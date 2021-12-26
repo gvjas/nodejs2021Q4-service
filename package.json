@@ -48,7 +48,6 @@
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "fastify": "^3.24.1",
-    "fastify-api-logger": "^1.0.10",
     "fastify-swagger": "^4.12.6",
     "pino": "^7.6.1",
     "uuid": "8.3.2",

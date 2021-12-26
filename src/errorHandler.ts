@@ -1,35 +1,21 @@
-import fastify, { FastifyError, FastifyReply, FastifyRequest } from "fastify";
-
-// function errorHandler() {
-//     var env = process.env.NODE_ENV || 'development';
-    // В программном обеспечении промежуточного уровня 
-    // для обработки ошибок определено четыре аргумента
-    // return function(err: string, req: string, res: string, next: string) {
-  
-    //    res.statusCode = 500;
-    //    switch (env) {
-    //       // Компонент errorHandler ведет себя по-разному
-    //       // в зависимости от значения переменной NODE_ENV
-    //       case 'development':
-    //          res.setHeader('Content-Type', 'application/json');
-    //          res.end(JSON.stringify(err));
-    //          break;
-    //       default:
-    //          res.end('Server error');
-    //    }
-    // }
-//  }
-// export type CustomError = FastifyError<{
-//     status: number
-//   }> 
-
+import { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import process from 'process';
+import path from "path";
 import fs, { createWriteStream } from "fs";
-import { HTTP_RESPOSE_MESSAGES, HTTP_STATUS_CODES } from "./resources/constants";
+
+import { DEFAULT_HEADERS, HTTP_RESPOSE_MESSAGES, HTTP_STATUS_CODES } from "./resources/constants";
+
+
+// setInterval(() => {console.log('Still working...'), 1000})
 
 process.on('uncaughtException', (err, origin) => {
   fs.writeSync(
     process.stderr.fd,
+    `Caught exception: ${err}\n` +
+    `Exception origin: ${origin}`
+  );
+  fs.writeFileSync(
+    path.resolve('./logs/error-crash.log'),
     `Caught exception: ${err}\n` +
     `Exception origin: ${origin}`
   );
@@ -40,34 +26,38 @@ process.on('uncaughtException', (err, origin) => {
 
 setTimeout(() => {
   console.log('This will still run.');
-}, 500);
+}, 1500);
 
 process.on('unhandledRejection', (reason, promise) => {
     console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+    fs.writeFileSync(
+      path.resolve('./logs/error-crash.log'),
+      `Unhandled Rejection at: ${promise}, reason:, ${reason}`
+    );
     process.exit(1)
     // Application specific logging, throwing an error, or other logic here
   });
   
 Promise.reject(Error('Oops!'));
-//   somePromise.then((res) => {
-//     return reportToUser(JSON.pasre(res)); // Note the typo (`pasre`)
-//   }); // No `.catch()` or `.then()`
 
+export type ResponseMessage = {[key: string]: string}
 
-export const errorHandler = async (err: FastifyError, req: FastifyRequest, rep: FastifyReply): Promise<void> => {
-    // if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND')
-    console.log(111111111111111111111111111111111, err)
-    // fs.writeFileSync('error.log', err.message)
-    // await process.stdout.pipe(fs.writeSync(
-    //     null,
-    //     `Caught exception: ${err}\n` +
-    //     `Exception origin: ${origin}`
-    //   );)
-    // await createWriteStream('error.)
-    rep.status(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({ err: HTTP_RESPOSE_MESSAGES.INTERNAL_SERVER_ERROR })
+/**
+ * @remarks
+ * Handler for server response
+ * @typeParam T - response body
+ * @param res - the fastify reply object
+ * @param code - numeric server response
+ * @param message - object for the response code
+ * @returns type void
+ */
+export const responseCodeMesssage = async <T>(res: FastifyReply, code: number, message: T | ResponseMessage): Promise<void> => {
+  res.status(code)
+      .header('Content-Type', DEFAULT_HEADERS.TYPE_JSON)
+      .send(JSON.stringify(message))    
 }
 
-// fastify.setErrorHandler((err, req, rep) => {
-//     console.log(err)
-//     rep.status(err.status || 500).send(err)
-// })
+export const errorHandler = async (err: FastifyError, req: FastifyRequest, rep: FastifyReply): Promise<void> => {
+      responseCodeMesssage(rep, err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+          {error: err.message})
+}

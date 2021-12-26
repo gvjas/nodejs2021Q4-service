@@ -10,9 +10,10 @@ const PORT = configConst.PORT || 4000
  */
 const startServer = async (): Promise<void> => {
   try {
-    await fastify.listen(PORT, (): void => 
-      console.log(`App is running on http://localhost:${PORT}`)
+    await fastify.listen(PORT, (): void =>{ 
+      console.log(`App is running on http://localhost:${PORT}`)}
     );
+
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
