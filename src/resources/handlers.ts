@@ -2,7 +2,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { validate as isUuid } from 'uuid';
 
-import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES, DEFAULT_HEADERS } from './constants';
+import { HTTP_STATUS_CODES, HTTP_RESPOSE_MESSAGES } from './constants';
 import { IidWise } from './Repository';
 import Column from './columns/column.model';
 import { responseCodeMesssage, ResponseMessage } from '../errorHandler';
@@ -162,10 +162,9 @@ const handlerValidId = async <T extends IidWise, U>(req: CustomRequest, res: Fas
   Promise<void> => {
     const { boardId, id } = req.params
     const board: U|void = await handlerId(req, res, getByBoardId, boardId)
-    // if (!board) {
-    //   return
-    // }
-    throw new Error('3333333333333333333')
+    if (!board) {
+      return
+    }
     const tasks: (T|undefined)[] = await getAll(boardId)
     const task: (T|undefined) = await tasks.find((t: T|undefined):boolean|undefined => t && t.id === id)
     if (id && !task) {
