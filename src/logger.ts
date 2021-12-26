@@ -38,7 +38,7 @@ const level = (LOG_LEVEL?: string): string|undefined => {
  * @param options - options
  * @param callback - for the error
  */
-fs.mkdir('./logs', { recursive: true }, (err): void => {
+fs.mkdir(path.resolve('./logs'), { recursive: true }, (err): void => {
   if (err) throw err;
 });
 

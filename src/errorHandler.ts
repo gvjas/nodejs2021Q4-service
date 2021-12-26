@@ -6,6 +6,16 @@ import fs from "fs";
 import { DEFAULT_HEADERS, HTTP_STATUS_CODES } from "./resources/constants";
 
 /**
+ * create logs directory
+ * @param path - logs directory
+ * @param options - options
+ * @param callback - for the error
+ */
+fs.mkdir(path.resolve('./logs'), { recursive: true }, (err): void => {
+  if (err) throw err;
+});
+
+/**
  * @remarks
  * The correct use of 'uncaughtException' is to perform synchronous cleanup 
  * of allocated resources (e.g. file descriptors, handles, etc) before shutting down the process. 
